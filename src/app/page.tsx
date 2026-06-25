@@ -1,65 +1,321 @@
-import Image from "next/image";
+import React from "react";
+import Link from "next/link";
+import CardFase from "@/components/ui/CardFase";
+import { ArrowRight, Star, ShieldAlert } from "lucide-react";
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="bg-ivory text-spa-dark selection:bg-quartz-200 selection:text-quartz-600 flex flex-col justify-between min-h-screen bg-grain overflow-hidden">
+      
+      {/* Decorative Floating Organic Blobs (Slow, drifting movements representing biological cycles) */}
+      <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-quartz-100/40 rounded-full blur-[120px] pointer-events-none -z-10 animate-float-slow" />
+      <div className="absolute top-[40%] left-[-20%] w-[500px] h-[500px] bg-olive-100/40 rounded-full blur-[100px] pointer-events-none -z-10 animate-float" style={{ animationDuration: "12s" }} />
+      <div className="absolute bottom-[10%] right-[-15%] w-[550px] h-[550px] bg-lavender-100/35 rounded-full blur-[110px] pointer-events-none -z-10 animate-float-slow" style={{ animationDuration: "16s" }} />
+
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-ivory/70 backdrop-blur-md border-b border-sand-100/60 px-6 lg:px-20 py-5 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <span className="font-serif text-2xl font-light tracking-[0.1em] text-spa-dark group-hover:text-quartz-500 transition-colors duration-500">
+            nefertiti
+          </span>
+          <div className="w-1.5 h-1.5 bg-quartz-300 rounded-full group-hover:bg-quartz-500 transition-colors duration-500" />
+        </Link>
+
+        <nav className="hidden md:flex items-center gap-10 text-xs font-semibold uppercase tracking-[0.2em] text-spa-light">
+          <Link href="#proposta" className="hover:text-spa-dark transition-colors duration-300 relative py-1 group/link">
+            Proposta
+            <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-quartz-300 group-hover/link:w-full transition-all duration-300" />
+          </Link>
+          <Link href="#ritmo" className="hover:text-spa-dark transition-colors duration-300 relative py-1 group/link">
+            O Ritmo
+          </Link>
+          <Link href="#manifesto" className="hover:text-spa-dark transition-colors duration-300 relative py-1 group/link">
+            Manifesto
+          </Link>
+        </nav>
+
+        <div className="flex items-center gap-6">
+          <Link
+            id="btn-login-nav"
+            href="/login"
+            className="text-xs font-bold uppercase tracking-[0.15em] text-spa-dark hover:text-quartz-500 transition-colors duration-300"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Entrar
+          </Link>
+          <Link
+            id="btn-signup-nav"
+            href="/login?signup=true"
+            className="text-xs font-bold uppercase tracking-[0.25em] bg-spa-dark text-white hover:bg-quartz-400 hover:text-white px-6 py-3 rounded-full hover:shadow-lg transition-all duration-500 cursor-pointer"
           >
-            Documentation
-          </a>
+            Fazer Parte
+          </Link>
         </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-grow">
+        
+        {/* Editorial Hero Section */}
+        <section id="proposta" className="relative px-6 lg:px-20 pt-16 pb-24 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 items-center">
+          
+          {/* Left Column (Typography Art) */}
+          <div className="lg:col-span-7 flex flex-col justify-center text-left">
+            <div className="flex items-center gap-2 mb-6">
+              <span className="h-[1px] w-8 bg-sand-300" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-spa-light">
+                Autocuidado Reconfigurado
+              </span>
+            </div>
+
+            <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-extralight leading-[1.1] text-spa-dark mb-8">
+              O ciclo é sua <br />
+              <span className="italic text-quartz-400 font-normal">potência</span>, não seu <br />
+              limite.
+            </h1>
+
+            <p className="text-sm sm:text-base text-spa-medium font-light leading-relaxed max-w-lg mb-12">
+              Nefertiti redefine a experiência de saúde feminina. Longe das métricas frias e robóticas, propomos um ritual estético e científico de acompanhamento hormonal, nutrição integrativa e bem-estar integrativo.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-5 items-stretch sm:items-center">
+              <Link
+                id="btn-hero-start"
+                href="/login?signup=true"
+                className="group flex items-center justify-center gap-3 text-xs font-bold tracking-[0.25em] uppercase bg-quartz-400 text-white px-8 py-4.5 rounded-full hover:bg-quartz-500 hover:shadow-[0_10px_25px_rgba(234,147,155,0.4)] transition-all duration-500 cursor-pointer"
+              >
+                Criar Conta Boutique
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform duration-300" />
+              </Link>
+              <Link
+                id="btn-hero-learn"
+                href="#ritmo"
+                className="flex items-center justify-center text-xs font-bold tracking-[0.25em] uppercase border border-sand-200 hover:border-quartz-300 text-spa-dark px-8 py-4.5 rounded-full hover:bg-white transition-all duration-500"
+              >
+                Explorar Método
+              </Link>
+            </div>
+
+            {/* Premium details block */}
+            <div className="flex items-center gap-8 mt-20 border-t border-sand-100/60 pt-8 max-w-sm">
+              <div className="flex -space-x-2">
+                <div className="w-8 h-8 rounded-full border border-ivory bg-quartz-200 flex items-center justify-center text-[10px] font-bold text-quartz-600">N</div>
+                <div className="w-8 h-8 rounded-full border border-ivory bg-olive-200 flex items-center justify-center text-[10px] font-bold text-olive-600">F</div>
+                <div className="w-8 h-8 rounded-full border border-ivory bg-lavender-200 flex items-center justify-center text-[10px] font-bold text-lavender-600">L</div>
+              </div>
+              <p className="text-[11px] text-spa-light font-light leading-snug">
+                Plataforma de alta fidelidade desenhada exclusivamente para a biologia feminina cíclica.
+              </p>
+            </div>
+          </div>
+
+          {/* Right Column (The interactive mock showcase) */}
+          <div className="lg:col-span-5 flex justify-center lg:justify-end">
+            <div className="relative w-full max-w-md">
+              {/* Floating micro-indicator */}
+              <div className="absolute -top-8 -left-4 bg-white/90 backdrop-blur-md border border-sand-200/50 rounded-2xl px-5 py-3.5 shadow-[0_10px_30px_rgba(42,36,33,0.05)] flex items-center gap-3 z-10 animate-float" style={{ animationDuration: "5s" }}>
+                <Star className="w-4 h-4 text-quartz-400 fill-quartz-200" />
+                <div>
+                  <p className="text-[9px] uppercase font-bold tracking-widest text-spa-light">Fase Hormonal</p>
+                  <p className="text-xs font-serif italic text-spa-dark">Pico de estrogênio</p>
+                </div>
+              </div>
+
+              {/* Redesigned Premium CardFase */}
+              <CardFase />
+            </div>
+          </div>
+        </section>
+
+        {/* Asymmetrical Editorial Columns Section (Replaces the classic AI features grid) */}
+        <section id="ritmo" className="py-28 px-6 lg:px-20 border-y border-sand-100/50 bg-sand-50/20 relative">
+          <div className="max-w-6xl mx-auto">
+            
+            {/* Minimalist Section Title */}
+            <div className="mb-24 text-left">
+              <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-spa-light block mb-4">
+                Sincronicidade
+              </span>
+              <h2 className="font-serif text-4xl sm:text-5xl font-light text-spa-dark max-w-2xl leading-tight">
+                Um olhar refinado para cada momento do seu ciclo.
+              </h2>
+            </div>
+
+            {/* Asymmetrical Layout (Diagonal Scrolling Flow) */}
+            <div className="space-y-32">
+              
+              {/* Column 1: Left Aligned */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                <div className="md:col-span-5 text-left">
+                  <span className="font-serif text-5xl font-extralight text-quartz-300 block mb-6 italic">01/</span>
+                  <h3 className="font-serif text-2xl font-light text-spa-dark mb-4">
+                    Monitoramento Biológico Consciente
+                  </h3>
+                  <p className="text-xs sm:text-sm text-spa-light leading-relaxed font-light">
+                    Sem fluxogramas cinzas ou relatórios complexos de planilhas. Nossa interface traduz sua temperatura, humor e dados hormonais em uma narrativa visual elegante, oferecendo insights que se adaptam à sua rotina real de forma natural.
+                  </p>
+                </div>
+                <div className="md:col-span-7 flex justify-center md:justify-end">
+                  <div className="h-[250px] w-full max-w-md bg-gradient-to-r from-quartz-100/60 to-lavender-100/40 rounded-[2rem] border border-sand-200/50 p-6 flex flex-col justify-center gap-4 relative overflow-hidden group">
+                    <div className="absolute top-2 right-2 text-[80px] font-serif font-extralight opacity-10 text-quartz-400 select-none">ritmo</div>
+                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-quartz-400 font-serif font-bold text-sm shadow-sm">01</div>
+                    <h4 className="font-serif text-lg italic text-spa-dark">Oscilação Saudável</h4>
+                    <p className="text-xs text-spa-light font-light leading-relaxed">Seu estrogênio e progesterona agem como marés. Nós ajudamos a entender as flutuações cognitivas e físicas de cada oscilação.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Column 2: Right Aligned (Asymmetrical layout shifting) */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center md:flex-row-reverse">
+                <div className="md:col-span-7 flex justify-center md:justify-start order-2 md:order-1">
+                  <div className="h-[250px] w-full max-w-md bg-gradient-to-r from-olive-100/50 to-sand-100/40 rounded-[2rem] border border-sand-200/50 p-6 flex flex-col justify-center gap-4 relative overflow-hidden">
+                    <div className="absolute top-2 right-2 text-[80px] font-serif font-extralight opacity-10 text-olive-400 select-none">energia</div>
+                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-olive-400 font-serif font-bold text-sm shadow-sm">02</div>
+                    <h4 className="font-serif text-lg italic text-spa-dark">Sinergia de Nutrientes</h4>
+                    <p className="text-xs text-spa-light font-light leading-relaxed">Alimentos sugeridos com precisão para apoiar os picos metabólicos da fase lútea ou repor o ferro durante a menstruação.</p>
+                  </div>
+                </div>
+                <div className="md:col-span-5 text-left order-1 md:order-2">
+                  <span className="font-serif text-5xl font-extralight text-olive-300 block mb-6 italic">02/</span>
+                  <h3 className="font-serif text-2xl font-light text-spa-dark mb-4">
+                    Nutrição Sintonizada com o Metabolismo
+                  </h3>
+                  <p className="text-xs sm:text-sm text-spa-light leading-relaxed font-light">
+                    Sua taxa metabólica basal muda ao longo do mês. Nefertiti guia sua alimentação funcional semana a semana, recomendando pratos e superalimentos que trabalham em harmonia com seus hormônios, em vez de impor dietas restritivas genéricas.
+                  </p>
+                </div>
+              </div>
+
+              {/* Column 3: Center Focused */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                <div className="md:col-span-5 text-left">
+                  <span className="font-serif text-5xl font-extralight text-lavender-300 block mb-6 italic">03/</span>
+                  <h3 className="font-serif text-2xl font-light text-spa-dark mb-4">
+                    Clínica Boutique Digital
+                  </h3>
+                  <p className="text-xs sm:text-sm text-spa-light leading-relaxed font-light">
+                    Conectamos você a uma equipe médica de elite — ginecologistas integrativas, endocrinologistas e terapeutas com foco no bem-estar feminino. Com teleconsultas e prontuários sincronizados aos seus registros diários, o cuidado médico torna-se contínuo e intimista.
+                  </p>
+                </div>
+                <div className="md:col-span-7 flex justify-center md:justify-end">
+                  <div className="h-[250px] w-full max-w-md bg-gradient-to-r from-lavender-100/50 to-quartz-100/30 rounded-[2rem] border border-sand-200/50 p-6 flex flex-col justify-center gap-4 relative overflow-hidden">
+                    <div className="absolute top-2 right-2 text-[80px] font-serif font-extralight opacity-10 text-lavender-400 select-none">cuidado</div>
+                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-lavender-400 font-serif font-bold text-sm shadow-sm">03</div>
+                    <h4 className="font-serif text-lg italic text-spa-dark">Conselhos Integrativos</h4>
+                    <p className="text-xs text-spa-light font-light leading-relaxed">Suas médicas parceiras têm acesso ao seu diário de sintomas e nutrição, eliminando conversas repetitivas e fornecendo diagnósticos precisos.</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        {/* Brand Manifesto Section */}
+        <section id="manifesto" className="px-6 lg:px-20 py-24 max-w-5xl mx-auto text-center relative">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-sand-100/30 rounded-full blur-[80px] pointer-events-none -z-10" />
+          <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-spa-light block mb-6">
+            Nosso Manifesto
+          </span>
+          <h2 className="font-serif text-3xl sm:text-5xl font-extralight text-spa-dark leading-snug italic max-w-4xl mx-auto">
+            &ldquo;Acreditamos que a tecnologia deve abraçar a natureza do corpo feminino, criando espaços de cura digitais que inspiram beleza, calma e autoconhecimento.&rdquo;
+          </h2>
+          <div className="w-12 h-[1px] bg-sand-300 mx-auto mt-10" />
+        </section>
+
+        {/* Security & Clean architecture block */}
+        <section className="bg-spa-dark text-ivory px-6 lg:px-20 py-24 rounded-t-[3rem] relative overflow-hidden">
+          <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-quartz-500/10 rounded-full blur-[90px]" />
+          <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <div className="lg:col-span-6">
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-quartz-300 block mb-3">
+                Segurança Boutique
+              </span>
+              <h2 className="font-serif text-4xl sm:text-5xl font-light leading-tight mb-8">
+                Prontuário criptografado, <br />
+                privacidade inegociável.
+              </h2>
+              <p className="text-sm text-sand-100/75 leading-relaxed font-light mb-8">
+                Diferente de aplicativos tradicionais de ciclo que mercantilizam dados pessoais, o Nefertiti foi estruturado sobre os padrões mais altos de conformidade médica internacional. Seus dados de sintomas e consultas são protegidos pelo Firebase Authentication e encriptados diretamente no Cloud Firestore.
+              </p>
+              
+              <div className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl p-4 max-w-md">
+                <ShieldAlert className="w-5 h-5 text-quartz-300 flex-shrink-0" />
+                <p className="text-xs text-sand-50/80 font-light">
+                  Nenhum dado de saúde é compartilhado com terceiros ou usado para fins de marketing. Sua soberania hormonal é protegida.
+                </p>
+              </div>
+            </div>
+
+            <div className="lg:col-span-6 flex justify-center lg:justify-end">
+              <div className="relative border border-white/15 rounded-[2rem] p-8 max-w-sm w-full bg-white/[0.02] backdrop-blur-md">
+                <h4 className="font-serif text-xl italic text-white mb-6">Arquitetura de Segurança</h4>
+                <ul className="space-y-5 text-xs text-sand-100/80 font-light">
+                  <li className="flex items-center gap-3">
+                    <span className="w-1.5 h-1.5 rounded-full bg-quartz-300" />
+                    Criptografia TLS em trânsito e AES-256 em repouso.
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <span className="w-1.5 h-1.5 rounded-full bg-quartz-300" />
+                    Validação SSR com tokens de sessão Firebase Admin.
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <span className="w-1.5 h-1.5 rounded-full bg-quartz-300" />
+                    Adequado aos regulamentos internacionais HIPAA e LGPD.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* Clean minimal Invitation CTA */}
+        <section className="bg-sand-50/50 py-24 px-6 text-center border-t border-sand-200/40 relative">
+          <div className="max-w-2xl mx-auto">
+            <h2 className="font-serif text-4xl font-extralight text-spa-dark mb-6">
+              Torne-se membro do <br />
+              <span className="italic text-quartz-400 font-normal">Santuário Nefertiti</span>
+            </h2>
+            <p className="text-xs sm:text-sm text-spa-light font-light mb-10 max-w-md mx-auto leading-relaxed">
+              Crie seu acesso inicial e experimente a serenidade de um ecossistema projetado para o seu bem-estar hormonal.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-sm mx-auto">
+              <Link
+                id="btn-cta-signup"
+                href="/login?signup=true"
+                className="text-xs font-bold uppercase tracking-[0.25em] bg-spa-dark hover:bg-quartz-400 text-white hover:text-white px-8 py-4.5 rounded-full hover:shadow-lg transition-all duration-500 text-center"
+              >
+                Criar Acesso
+              </Link>
+              <Link
+                id="btn-cta-login"
+                href="/login"
+                className="text-xs font-bold uppercase tracking-[0.25em] border border-sand-200 hover:border-quartz-300 bg-white/50 text-spa-dark px-8 py-4.5 rounded-full transition-all duration-500 text-center"
+              >
+                Entrar
+              </Link>
+            </div>
+          </div>
+        </section>
+
       </main>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-sand-100/50 px-6 lg:px-20 py-10 text-center text-xs text-spa-light">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-3">
+            <span className="font-serif text-xl font-light tracking-widest text-spa-dark">nefertiti</span>
+            <span className="text-[10px] text-spa-light font-light">| &copy; {new Date().getFullYear()} Nefertiti Sanctuary.</span>
+          </div>
+          <div className="flex gap-8 text-[10px] font-bold uppercase tracking-wider">
+            <Link href="#" className="hover:text-spa-dark transition-colors">Termos</Link>
+            <Link href="#" className="hover:text-spa-dark transition-colors">Privacidade</Link>
+            <Link href="#" className="hover:text-spa-dark transition-colors">Suporte</Link>
+          </div>
+        </div>
+      </footer>
+
     </div>
   );
 }

@@ -1,26 +1,127 @@
 @import "tailwindcss";
 
+@theme {
+  /* Brand Pastel Palette - Wellness Boutique Spa */
+  --color-sand-50: #FAF8F5;
+  --color-sand-100: #F4ECE1;
+  --color-sand-200: #EADCB9;
+  --color-sand-300: #DEC284;
+  --color-sand-400: #CDA754;
+  --color-sand-500: #B7903D;
+
+  --color-quartz-50: #FFF9F9;
+  --color-quartz-100: #FDF0F1;
+  --color-quartz-200: #FAE0E2;
+  --color-quartz-300: #F3BAC0;
+  --color-quartz-400: #EA939B;
+  --color-quartz-500: #DC6B74;
+
+  --color-lavender-50: #FAF8FC;
+  --color-lavender-100: #F4EEF8;
+  --color-lavender-200: #E8DAF1;
+  --color-lavender-300: #D6BAE6;
+  --color-lavender-400: #C095D7;
+  --color-lavender-500: #A870C5;
+
+  --color-olive-50: #F7FAF3;
+  --color-olive-100: #EEF4E5;
+  --color-olive-200: #DCE5CC;
+  --color-olive-300: #C2D4A5;
+  --color-olive-400: #A7BE80;
+  --color-olive-500: #8CA563;
+
+  --color-ivory: #FDFDFB;
+  --color-spa-dark: #2A2421;
+  --color-spa-medium: #544943;
+  --color-spa-light: #908279;
+
+  /* Typography */
+  --font-serif: var(--font-playfair-display);
+  --font-sans: var(--font-plus-jakarta-sans);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #FDFDFB; /* Ivory default */
+  --foreground: #2A2421; /* Spa Dark default */
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), sans-serif;
+  overflow-x: hidden;
+}
+
+/* Premium Linen/Paper Grain Overlay */
+.bg-grain {
+  position: relative;
+}
+
+.bg-grain::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 99;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Smooth organic floating animations */
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-15px) scale(1.03);
+  }
+}
+
+.animate-float {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 9s ease-in-out infinite;
+}
+
+/* Liquid wave animation for the water tracker */
+@keyframes wave-move {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.liquid-wave {
+  animation: wave-move 8s linear infinite;
+}
+
+/* Custom soft scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #FDFDFB;
+}
+::-webkit-scrollbar-thumb {
+  background: #EADCB9;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #DEC284;
 }
