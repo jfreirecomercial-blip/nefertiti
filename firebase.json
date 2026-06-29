@@ -7,5 +7,10 @@
   },
   "functions": {
     "source": "functions"
+  },
+  "apphosting": {
+    "backendId": "nefertiti-1",
+    "rootDir": "/",
+    "alwaysDeployFromSource": true
   }
 }
