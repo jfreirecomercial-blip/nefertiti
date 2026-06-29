@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 import { AuthProvider } from "@/context/AuthContext";
+import { LanguageProvider } from "@/context/LanguageContext";
+import CookieConsent from "@/components/ui/CookieConsent";
 import "./globals.css";
 
 const playfairDisplay = Playfair_Display({
@@ -30,9 +32,12 @@ export default function RootLayout({
       className={`${playfairDisplay.variable} ${plusJakartaSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-ivory text-spa-dark font-sans">
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <LanguageProvider>
+          <AuthProvider>
+            {children}
+            <CookieConsent />
+          </AuthProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

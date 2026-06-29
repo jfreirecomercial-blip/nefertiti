@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Plus, Sparkles } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export interface CardFaseProps {
   phaseName?: string;
@@ -18,20 +19,33 @@ export interface CardFaseProps {
 }
 
 export default function CardFase({
-  phaseName = "Fase Folicular",
+  phaseName,
   phaseDay = 7,
   phaseDuration = 14,
-  nutritionSuggestion = {
-    title: "Nutrição Regenerativa",
-    description: "Sua energia está ascendendo com o aumento do estrogênio. Foque em alimentos leves que estimulam a digestão e fornecem micronutrientes essenciais.",
-    foods: ["Broto de brócolis", "Sementes de girassol", "Abacate orgânico", "Frutas vermelhas"],
-  },
+  nutritionSuggestion,
   waterIntakeMl: initialWater = 850,
   waterTargetMl = 2500,
   onAddWater,
 }: CardFaseProps) {
+  const { t } = useLanguage();
   const [water, setWater] = useState(initialWater);
   const [isWaterRipple, setIsWaterRipple] = useState(false);
+
+  // Fallbacks traduzidos dinamicamente
+  const resolvedPhaseName = phaseName || t("cardFase.defaultPhase");
+  
+  let defaultFoods = [];
+  try {
+    defaultFoods = JSON.parse(t("cardFase.foods"));
+  } catch (e) {
+    defaultFoods = ["Broto de brócolis", "Sementes de girassol", "Abacate orgânico", "Frutas vermelhas"];
+  }
+
+  const resolvedNutrition = nutritionSuggestion || {
+    title: t("cardFase.nutritionTitle"),
+    description: t("cardFase.nutritionDesc"),
+    foods: defaultFoods,
+  };
 
   const handleAddWater = () => {
     const amount = 250;
@@ -66,11 +80,11 @@ export default function CardFase({
           <div className="flex items-center gap-1.5 mb-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-quartz-300 animate-pulse" />
             <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-spa-light">
-              Ritmo Interno
+              {t("cardFase.badge")}
             </span>
           </div>
           <h3 className="font-serif text-4xl text-spa-dark font-light tracking-wide italic">
-            {phaseName}
+            {resolvedPhaseName}
           </h3>
         </div>
         <div className="p-2.5 bg-white/50 backdrop-blur-sm border border-sand-200/30 rounded-full group-hover:rotate-12 transition-transform duration-500 flex items-center justify-center w-12 h-12">
@@ -124,8 +138,8 @@ export default function CardFase({
       {/* Cycle Progress - Artistic Curved Wave instead of a boring bar */}
       <div className="relative mb-10">
         <div className="flex justify-between text-[11px] font-medium text-spa-light tracking-wider mb-4">
-          <span>Dia {phaseDay} de {phaseDuration}</span>
-          <span className="italic">Crescimento Folicular</span>
+          <span>{t("cardFase.dayOf", { day: phaseDay, duration: phaseDuration })}</span>
+          <span className="italic">{t("cardFase.follicularGrowth")}</span>
         </div>
         
         <div className="relative h-16 w-full flex items-center justify-center">
@@ -175,19 +189,19 @@ export default function CardFase({
       <div className="relative border-t border-sand-100/60 pt-8 mb-10">
         <div className="flex items-center justify-between mb-4">
           <h4 className="font-serif text-lg italic text-spa-dark">
-            {nutritionSuggestion.title}
+            {resolvedNutrition.title}
           </h4>
           <span className="text-[10px] font-bold uppercase tracking-widest text-olive-500 bg-olive-50 px-2.5 py-1 rounded-md border border-olive-100">
-            Foco Bioquímico
+            {t("cardFase.bioFocus")}
           </span>
         </div>
         <p className="text-xs text-spa-light leading-relaxed mb-6 font-light">
-          {nutritionSuggestion.description}
+          {resolvedNutrition.description}
         </p>
         
         {/* Understated Minimal List instead of tags */}
         <div className="grid grid-cols-2 gap-y-3 gap-x-4 border-b border-sand-100/40 pb-6">
-          {nutritionSuggestion.foods.map((food, index) => (
+          {resolvedNutrition.foods.map((food: string, index: number) => (
             <div key={index} className="flex items-center gap-2 text-xs text-spa-medium font-medium group/item">
               <span className="w-1.5 h-1.5 rounded-full bg-olive-300 group-hover/item:scale-150 transition-transform duration-300" />
               <span className="group-hover/item:text-olive-600 transition-colors duration-200">{food}</span>
@@ -200,7 +214,7 @@ export default function CardFase({
       <div className="relative flex items-center justify-between">
         <div>
           <h4 className="text-xs font-bold uppercase tracking-widest text-spa-light mb-1">
-            Hidratação Ritual
+            {t("cardFase.hydrationTitle")}
           </h4>
           <div className="flex items-baseline gap-1.5">
             <span className="font-serif text-3xl font-light text-spa-dark italic">{water}</span>
@@ -230,7 +244,7 @@ export default function CardFase({
           {/* Elegant Outline Add Water Button */}
           <button
             onClick={handleAddWater}
-            aria-label="Registrar 250ml de água"
+            aria-label={t("cardFase.registerWater")}
             className="group/btn flex items-center justify-center w-12 h-12 rounded-full border border-sand-200 hover:border-quartz-300 text-spa-dark hover:text-quartz-500 bg-white/40 hover:bg-white transition-all duration-500 active:scale-95 cursor-pointer shadow-sm"
           >
             <Plus className="w-5 h-5 group-hover/btn:rotate-90 transition-transform duration-500 ease-out" />

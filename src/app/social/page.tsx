@@ -1,0 +1,635 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { onAuthStateChanged, User } from "firebase/auth";
+import { auth, db } from "@/lib/firebase";
+import { 
+  collection, 
+  getDocs, 
+  query, 
+  orderBy, 
+  limit,
+  doc,
+  getDoc,
+  deleteDoc,
+  updateDoc
+} from "firebase/firestore";
+import { 
+  Heart, 
+  MessageSquare, 
+  Image as ImageIcon, 
+  X, 
+  Send, 
+  User as UserIcon, 
+  Sparkles, 
+  Clock, 
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
+  Edit,
+  Trash2
+} from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+import LanguageSelector from "@/components/ui/LanguageSelector";
+import { compressImage } from "@/lib/image-compression";
+
+interface Post {
+  id: string;
+  userId: string;
+  userName: string;
+  userPhoto?: string;
+  content: string;
+  photos: string[];
+  likesCount: number;
+  commentsCount: number;
+  createdAt: Date;
+}
+
+export default function SocialPage() {
+  const { t } = useLanguage();
+  const router = useRouter();
+
+  // Auth & Profile
+  const [user, setUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [publishing, setPublishing] = useState(false);
+
+  // Post states
+  const [content, setContent] = useState("");
+  const [selectedPhotos, setSelectedPhotos] = useState<File[]>([]);
+  const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
+  
+  // Feed states
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [feedLoading, setFeedLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
+  // Check auth
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (!currentUser) {
+        router.push("/login");
+      } else {
+        setUser(currentUser);
+        // Buscar se o usuário é administrador
+        try {
+          const userDocRef = doc(db, "users", currentUser.uid);
+          const userDocSnap = await getDoc(userDocRef);
+          if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            setIsAdmin(userData.role === "admin");
+          }
+        } catch (err) {
+          console.error("Erro ao carregar dados do usuário:", err);
+        }
+        loadFeed();
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [router]);
+
+  // Load posts
+  async function loadFeed() {
+    setFeedLoading(true);
+    setErrorMessage("");
+    try {
+      const postsRef = collection(db, "social_posts");
+      const q = query(postsRef, orderBy("createdAt", "desc"), limit(20));
+      const querySnapshot = await getDocs(q);
+      
+      const loadedPosts: Post[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        loadedPosts.push({
+          id: doc.id,
+          userId: data.userId,
+          userName: data.userName || "Membro Nefertiti",
+          userPhoto: data.userPhoto,
+          content: data.content || "",
+          photos: data.photos || [],
+          likesCount: data.likesCount || 0,
+          commentsCount: data.commentsCount || 0,
+          createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : new Date(),
+        });
+      });
+      
+      setPosts(loadedPosts);
+    } catch (err: unknown) {
+      console.error("Erro ao carregar feed:", err);
+      // Caso a coleção ainda não exista no Firebase, exibiremos uma mensagem vazia
+      setErrorMessage("Não foi possível carregar as publicações. Certifique-se de que a coleção exista.");
+    } finally {
+      setFeedLoading(false);
+    }
+  }
+
+  // Handle image selections (up to 10 photos)
+  const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const filesArray = Array.from(files);
+    
+    // Verificar limite máximo de 10 fotos no total
+    if (selectedPhotos.length + filesArray.length > 10) {
+      alert(t("social.limitExceeded") || "Limite máximo de 10 fotos atingido por relato.");
+      return;
+    }
+
+    const newPhotos = [...selectedPhotos, ...filesArray];
+    setSelectedPhotos(newPhotos);
+
+    // Gerar previews locais
+    const newPreviews = filesArray.map(file => URL.createObjectURL(file));
+    setPhotoPreviews([...photoPreviews, ...newPreviews]);
+  };
+
+  // Remove selected photo
+  const removeSelectedPhoto = (index: number) => {
+    const newPhotos = [...selectedPhotos];
+    newPhotos.splice(index, 1);
+    setSelectedPhotos(newPhotos);
+
+    const newPreviews = [...photoPreviews];
+    // Limpar o objeto URL para economizar memória
+    URL.revokeObjectURL(newPreviews[index]);
+    newPreviews.splice(index, 1);
+    setPhotoPreviews(newPreviews);
+  };
+
+  // Submit Post
+  const handlePublishPost = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user || (!content.trim() && selectedPhotos.length === 0)) return;
+
+    setPublishing(true);
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    try {
+      const base64Photos: string[] = [];
+
+      // 1. Comprimir e converter fotos para base64
+      if (selectedPhotos.length > 0) {
+        const compressionPromises = selectedPhotos.map(async (file) => {
+          const compressedFile = await compressImage(file, {
+            maxDimension: 1200,
+            initialQuality: 0.75,
+            maxSizeBytes: 250 * 1024
+          });
+
+          return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(compressedFile);
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = (err) => reject(err);
+          });
+        });
+
+        const base64Results = await Promise.all(compressionPromises);
+        base64Photos.push(...base64Results);
+      }
+
+      // 2. Enviar para API de moderação e criação de posts
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/social/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${idToken}`
+        },
+        body: JSON.stringify({
+          content: content,
+          photos: base64Photos,
+          userName: user.displayName || "Membro Nefertiti",
+          userPhoto: user.photoURL || null
+        })
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || "Erro ao publicar relato.");
+      }
+
+      // Limpar formulário
+      setContent("");
+      setSelectedPhotos([]);
+      photoPreviews.forEach(url => URL.revokeObjectURL(url));
+      setPhotoPreviews([]);
+
+      setSuccessMessage(t("social.postSuccess") || "Relato publicado no santuário com sucesso!");
+      loadFeed(); // Atualizar Feed
+    } catch (err: unknown) {
+      console.error("Erro ao publicar post:", err);
+      setErrorMessage((err as Error).message || "Erro ao publicar.");
+    } finally {
+      setPublishing(false);
+    }
+  };
+
+  // Delete Post
+  const handleDeletePost = async (postId: string) => {
+    if (!confirm("Tem certeza de que deseja excluir este relato?")) return;
+    setErrorMessage("");
+    setSuccessMessage("");
+    try {
+      await deleteDoc(doc(db, "social_posts", postId));
+      setPosts(prev => prev.filter(p => p.id !== postId));
+      setSuccessMessage("Relato excluído com sucesso.");
+    } catch (err: unknown) {
+      console.error("Erro ao excluir relato:", err);
+      setErrorMessage("Erro ao excluir: " + (err as Error).message);
+    }
+  };
+
+  // Edit Post
+  const handleEditPost = async (postId: string, newContent: string) => {
+    if (!user) return false;
+    setErrorMessage("");
+    setSuccessMessage("");
+    try {
+      // 1. Chamar API de moderação de texto
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/social/posts/moderate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${idToken}`
+        },
+        body: JSON.stringify({ content: newContent })
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || "Conteúdo impróprio detectado.");
+      }
+
+      // 2. Atualizar no Firestore
+      await updateDoc(doc(db, "social_posts", postId), {
+        content: newContent
+      });
+
+      setPosts(prev => prev.map(p => p.id === postId ? { ...p, content: newContent } : p));
+      setSuccessMessage("Relato editado com sucesso.");
+      return true;
+    } catch (err: unknown) {
+      console.error("Erro ao editar relato:", err);
+      setErrorMessage("Erro ao editar: " + (err as Error).message);
+      return false;
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-ivory flex items-center justify-center">
+        <div className="text-center">
+          <span className="w-8 h-8 rounded-full border-4 border-quartz-400 border-t-transparent animate-spin inline-block mb-4" />
+          <p className="font-serif italic text-spa-medium">Carregando painel social...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-ivory bg-grain text-spa-dark pb-20">
+      
+      {/* Background Blobs */}
+      <div className="absolute top-0 left-[-10%] w-[500px] h-[500px] bg-quartz-100/20 rounded-full blur-[120px] pointer-events-none -z-10 animate-float-slow" />
+      <div className="absolute bottom-0 right-[-10%] w-[450px] h-[450px] bg-olive-100/25 rounded-full blur-[100px] pointer-events-none -z-10" />
+
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-ivory/85 backdrop-blur-md border-b border-sand-100/60 px-6 lg:px-20 py-5 flex items-center justify-between">
+        <Link href="/profile" className="flex items-center gap-2 text-spa-dark hover:text-quartz-500 transition-colors">
+          <ArrowLeft className="w-4 h-4" />
+          <span className="text-xs font-bold uppercase tracking-[0.2em]">Painel</span>
+        </Link>
+        <div className="flex items-center gap-4">
+          <LanguageSelector />
+        </div>
+      </header>
+
+      <main className="max-w-3xl mx-auto px-6 mt-12 space-y-8">
+        
+        {/* Social Heading */}
+        <div className="text-center">
+          <span className="text-[9px] bg-quartz-50 text-quartz-600 font-bold px-3 py-1 rounded-full border border-quartz-200 uppercase tracking-widest inline-block mb-3">
+            Espaço de Relatos
+          </span>
+          <h2 className="font-serif text-3xl font-light text-spa-dark tracking-wide">
+            Círculo de Partilha
+          </h2>
+          <p className="text-xs text-spa-light font-light max-w-md mx-auto mt-2 leading-relaxed">
+            Compartilhe relatos de autocuidado, ciclos, flutuações hormonais ou bem-estar com outros membros de forma segura e acolhedora.
+          </p>
+        </div>
+
+        {/* Notifications */}
+        {errorMessage && (
+          <div className="p-4 bg-quartz-50 border border-quartz-200/50 rounded-2xl text-xs text-spa-dark">
+            {errorMessage}
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="p-4 bg-olive-50 border border-olive-200/30 rounded-2xl text-xs text-olive-800 flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-olive-500" />
+            {successMessage}
+          </div>
+        )}
+
+        {/* Create Post Form */}
+        <div className="bg-white/70 border border-sand-200/50 rounded-[2.2rem] p-6 shadow-sm">
+          <form onSubmit={handlePublishPost} className="space-y-4">
+            
+            <div className="flex items-start gap-4">
+              {user?.photoURL ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img 
+                  src={user.photoURL} 
+                  alt="Avatar" 
+                  className="w-10 h-10 rounded-full object-cover border border-sand-200"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-quartz-100 flex items-center justify-center text-quartz-400">
+                  <UserIcon className="w-5 h-5" />
+                </div>
+              )}
+
+              <div className="flex-grow">
+                <textarea
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  placeholder={t("social.textareaPlaceholder") || "Escreva um relato de ciclo ou autocuidado..."}
+                  rows={3}
+                  className="w-full bg-transparent border-0 resize-none text-xs text-spa-dark placeholder-spa-light outline-none font-medium focus:ring-0 pt-2"
+                />
+              </div>
+            </div>
+
+            {/* Photo Previews */}
+            {photoPreviews.length > 0 && (
+              <div className="grid grid-cols-5 gap-2 border-t border-sand-100/40 pt-4">
+                {photoPreviews.map((url, idx) => (
+                  <div key={idx} className="relative aspect-square border border-sand-200 rounded-xl overflow-hidden group">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={url} alt={`Preview ${idx}`} className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => removeSelectedPhoto(idx)}
+                      className="absolute top-1 right-1 p-1 bg-black/40 hover:bg-black/60 rounded-full text-white transition-all cursor-pointer"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Actions Bar */}
+            <div className="flex items-center justify-between border-t border-sand-100/40 pt-4">
+              <label className="flex items-center gap-2 text-xs text-spa-medium hover:text-quartz-500 cursor-pointer transition-colors">
+                <ImageIcon className="w-4 h-4" />
+                <span className="font-semibold">{t("social.addPhotos") || "Adicionar fotos"}</span>
+                <span className="text-[10px] text-spa-light">({photoPreviews.length}/10)</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  disabled={photoPreviews.length >= 10 || publishing}
+                  onChange={handlePhotoSelect}
+                  className="hidden"
+                />
+              </label>
+
+              <button
+                type="submit"
+                disabled={publishing || (!content.trim() && selectedPhotos.length === 0)}
+                className="flex items-center gap-2 py-2.5 px-6 bg-spa-dark hover:bg-quartz-400 text-white rounded-full text-xs font-bold uppercase tracking-[0.2em] shadow-md transition-all cursor-pointer disabled:bg-sand-200"
+              >
+                {publishing ? (
+                  <span className="w-4 h-4 border-2 border-white border-t-transparent animate-spin rounded-full" />
+                ) : (
+                  <>
+                    <Send className="w-3.5 h-3.5" />
+                    <span>Publicar</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+        {/* Posts Feed */}
+        <div className="space-y-6">
+          {feedLoading ? (
+            <div className="text-center py-10">
+              <span className="w-6 h-6 rounded-full border-3 border-quartz-400 border-t-transparent animate-spin inline-block" />
+            </div>
+          ) : posts.length === 0 ? (
+            <div className="bg-white/50 border border-sand-200/50 rounded-3xl p-10 text-center">
+              <p className="font-serif italic text-spa-medium">Nenhum relato no círculo ainda. Seja o primeiro a compartilhar!</p>
+            </div>
+          ) : (
+            posts.map((post) => (
+              <PostCard 
+                key={post.id} 
+                post={post} 
+                currentUser={user}
+                isAdmin={isAdmin}
+                onDelete={handleDeletePost}
+                onEdit={handleEditPost}
+              />
+            ))
+          )}
+        </div>
+
+      </main>
+
+    </div>
+  );
+}
+
+// Subcomponent PostCard for premium layout
+function PostCard({ 
+  post, 
+  currentUser, 
+  isAdmin, 
+  onDelete, 
+  onEdit 
+}: { 
+  post: Post; 
+  currentUser: User | null; 
+  isAdmin: boolean; 
+  onDelete: (id: string) => void; 
+  onEdit: (id: string, text: string) => Promise<boolean>;
+}) {
+  const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState(post.likesCount);
+  const [activePhotoIdx, setActivePhotoIdx] = useState(0);
+
+  // Edit states
+  const [isEditing, setIsEditing] = useState(false);
+  const [editContent, setEditContent] = useState(post.content);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleLike = () => {
+    setLiked(!liked);
+    setLikes(liked ? likes - 1 : likes + 1);
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    const success = await onEdit(post.id, editContent);
+    setIsSaving(false);
+    if (success) {
+      setIsEditing(false);
+    }
+  };
+
+  const canManage = currentUser && (post.userId === currentUser.uid || isAdmin);
+
+  return (
+    <div className="bg-white/70 border border-sand-200/50 rounded-[2.2rem] p-6 shadow-sm space-y-4">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          {post.userPhoto ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img 
+              src={post.userPhoto} 
+              alt={post.userName} 
+              className="w-9 h-9 rounded-full object-cover border border-sand-200"
+            />
+          ) : (
+            <div className="w-9 h-9 rounded-full bg-quartz-100 flex items-center justify-center text-quartz-400 border border-sand-200">
+              <UserIcon className="w-4.5 h-4.5" />
+            </div>
+          )}
+          <div>
+            <h4 className="text-xs text-spa-dark font-semibold leading-none">{post.userName}</h4>
+            <div className="flex items-center gap-1 text-[9px] text-spa-light font-medium mt-1">
+              <Clock className="w-2.5 h-2.5" />
+              <span>{post.createdAt.toLocaleDateString()}</span>
+            </div>
+          </div>
+        </div>
+
+        {canManage && !isEditing && (
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => setIsEditing(true)}
+              className="p-1.5 rounded-full text-spa-medium hover:text-quartz-500 hover:bg-quartz-50/50 transition-all cursor-pointer border-0 bg-transparent"
+              title="Editar relato"
+            >
+              <Edit className="w-3.5 h-3.5" />
+            </button>
+            <button 
+              onClick={() => onDelete(post.id)}
+              className="p-1.5 rounded-full text-spa-medium hover:text-red-500 hover:bg-red-50/50 transition-all cursor-pointer border-0 bg-transparent"
+              title="Excluir relato"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Content or Edit Field */}
+      {isEditing ? (
+        <div className="space-y-3">
+          <textarea
+            value={editContent}
+            onChange={(e) => setEditContent(e.target.value)}
+            rows={3}
+            className="w-full p-3 bg-ivory/50 border border-sand-200 rounded-xl text-xs text-spa-dark focus:outline-none focus:ring-1 focus:ring-quartz-300 font-medium resize-none"
+          />
+          <div className="flex items-center gap-2 justify-end">
+            <button
+              onClick={() => {
+                setIsEditing(false);
+                setEditContent(post.content);
+              }}
+              disabled={isSaving}
+              className="px-4 py-1.5 border border-sand-200 hover:bg-sand-50 rounded-full text-[10px] uppercase font-bold tracking-wider text-spa-medium transition-all cursor-pointer bg-white"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={isSaving || !editContent.trim()}
+              className="flex items-center gap-1.5 px-4 py-1.5 bg-spa-dark hover:bg-quartz-400 text-white rounded-full text-[10px] uppercase font-bold tracking-wider transition-all cursor-pointer disabled:bg-sand-200"
+            >
+              {isSaving ? (
+                <span className="w-3 h-3 border-2 border-white border-t-transparent animate-spin rounded-full" />
+              ) : (
+                "Salvar"
+              )}
+            </button>
+          </div>
+        </div>
+      ) : (
+        post.content && (
+          <p className="text-xs sm:text-sm text-spa-medium font-light leading-relaxed whitespace-pre-wrap">
+            {post.content}
+          </p>
+        )
+      )}
+
+      {/* Multiple Photos Gallery (Carousel style if > 1 photo) */}
+      {post.photos && post.photos.length > 0 && (
+        <div className="relative border border-sand-200/50 rounded-2xl overflow-hidden bg-sand-50/20 aspect-video flex items-center justify-center group">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img 
+            src={post.photos[activePhotoIdx]} 
+            alt={`Foto ${activePhotoIdx + 1}`} 
+            className="w-full h-full object-cover"
+          />
+
+          {post.photos.length > 1 && (
+            <>
+              <button 
+                onClick={() => setActivePhotoIdx(prev => (prev === 0 ? post.photos.length - 1 : prev - 1))}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-white/70 hover:bg-white text-spa-dark shadow opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button 
+                onClick={() => setActivePhotoIdx(prev => (prev === post.photos.length - 1 ? 0 : prev + 1))}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-white/70 hover:bg-white text-spa-dark shadow opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+              <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 bg-black/40 px-2 py-0.5 rounded-full text-[9px] text-white">
+                {activePhotoIdx + 1} / {post.photos.length}
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
+      {/* Actions */}
+      <div className="flex items-center gap-6 border-t border-sand-100/40 pt-4 text-xs text-spa-medium font-semibold">
+        <button 
+          onClick={handleLike}
+          className={`flex items-center gap-1.5 transition-colors cursor-pointer border-0 bg-transparent ${liked ? "text-quartz-500" : "text-spa-medium hover:text-quartz-500"}`}
+        >
+          <Heart className={`w-4 h-4 ${liked ? "fill-quartz-400" : ""}`} />
+          <span>{likes}</span>
+        </button>
+
+        <button className="flex items-center gap-1.5 text-spa-medium hover:text-quartz-500 cursor-pointer transition-colors border-0 bg-transparent">
+          <MessageSquare className="w-4 h-4" />
+          <span>{post.commentsCount}</span>
+        </button>
+      </div>
+
+    </div>
+  );
+}

@@ -1,0 +1,181 @@
+{
+  "nav": {
+    "proposta": "Proposition",
+    "ritmo": "Le Rythme",
+    "manifesto": "Manifeste",
+    "entrar": "Se Connecter",
+    "fazerParte": "Rejoindre le Sanctuaire"
+  },
+  "hero": {
+    "badge": "Soin de soi Reconfiguré",
+    "title1": "Le cycle est votre",
+    "title2": "puissance",
+    "title3": ", pas votre limite.",
+    "description": "Nefertiti redéfinit l'expérience de la santé féminine. Loin des mesures froides et robotiques, nous proposons un rituel esthétique et scientifique de suivi hormonal, de nutrition intégrative et de bien-être holistique.",
+    "btnBoutique": "Créer un Compte Boutique",
+    "btnExplore": "Explorer la Méthode",
+    "badgeText": "Plateforme haute fidélité conçue exclusivement pour la biologie féminine cyclique.",
+    "floatingBadge": "Phase Hormonale",
+    "floatingValue": "Pic d'œstrogène"
+  },
+  "cardFase": {
+    "badge": "Rythme Interne",
+    "defaultPhase": "Phase Folliculaire",
+    "dayOf": "Jour {day} sur {duration}",
+    "follicularGrowth": "Croissance Folliculaire",
+    "nutritionTitle": "Nutrition Régénératrice",
+    "nutritionDesc": "Votre énergie augmente avec la hausse des œstrogènes. Privilégiez des aliments légers qui stimulent la digestion et apportent des micronutriments essentiels.",
+    "bioFocus": "Focus Biochimique",
+    "foods": [
+      "Pousses de brocoli",
+      "Graines de tournesol",
+      "Avocat biologique",
+      "Fruits rouges"
+    ],
+    "hydrationTitle": "Hydratation Rituelle",
+    "registerWater": "Enregistrer 250ml d'eau"
+  },
+  "ritmo": {
+    "badge": "Synchronicité",
+    "title": "Un regard raffiné sur chaque instant de votre cycle.",
+    "item1": {
+      "num": "01/",
+      "title": "Suivi Biologique Conscient",
+      "desc": "Pas d'organigrammes gris ni de rapports complexes. Notre interface traduit votre température, votre humeur et vos données hormonales en un récit visuel élégant, offrant des analyses qui s'adaptent naturellement à votre quotidien réel.",
+      "visualTitle": "Fluctuation Saine",
+      "visualDesc": "Vos œstrogènes et votre progestérone agissent comme des marées. Nous vous aidons à comprendre les variations cognitives et physiques de chaque cycle."
+    },
+    "item2": {
+      "num": "02/",
+      "title": "Nutrition Harmonisée avec le Métabolisme",
+      "desc": "Votre taux métabolique de base évolue tout au long du mois. Nefertiti guide votre nutrition fonctionnelle semaine après semaine, en recommandant des plats et superaliments qui agissent en harmonie avec vos hormones, plutôt que d'imposer des régimes restrictifs génériques.",
+      "visualTitle": "Synergie des Nutriments",
+      "visualDesc": "Aliments suggérés avec précision pour soutenir les pics métaboliques de la phase lutéale ou reconstituer le fer pendant les règles."
+    },
+    "item3": {
+      "num": "03/",
+      "title": "Clinique Boutique Digitale",
+      "desc": "Nous vous connectons à une équipe médicale d'élite — gynécologues intégratives, endocrinologues et thérapeutes dédiées au bien-être féminin. Grâce aux téléconsultations et aux dossiers synchronisés avec vos journaux quotidiens, le suivi médical devient continu et intime.",
+      "visualTitle": "Conseils Intégratifs",
+      "visualDesc": "Vos médecins partenaires ont accès à votre journal des symptômes et de nutrition, éliminant les explications répétitives et fournissant des diagnostics précis."
+    }
+  },
+  "manifesto": {
+    "badge": "Notre Manifeste",
+    "quote": "Nous croyons que la technologie doit embrasser la nature du corps féminin, en créant des espaces de guérison numériques qui inspirent la beauté, le calme et la connaissance de soi."
+  },
+  "seguranca": {
+    "badge": "Sécurité Boutique",
+    "title": "Dossier chiffré, confidentialité non négociable.",
+    "description": "Contrairement aux applications de cycle traditionnelles qui monétisent les données personnelles, Nefertiti est structuré selon les normes les plus strictes de conformité médicale internationale. Vos données de symptômes et de consultations sont protégées par Firebase Authentication et chiffrées directement dans Cloud Firestore.",
+    "warning": "Aucune donnée de santé n'est partagée avec des tiers ou utilisée à des fins de marketing. Votre souveraineté hormonale est protégée.",
+    "archTitle": "Architecture de Sécurité",
+    "item1": "Chiffrement TLS en transit et AES-256 au repos.",
+    "item2": "Validation SSR avec jetons de session Firebase Admin.",
+    "item3": "Conforme aux réglementations internationales HIPAA et LGPD."
+  },
+  "cta": {
+    "title1": "Devenez membre du",
+    "title2": "Sanctuaire Nefertiti",
+    "description": "Créez votre accès initial et découvrez la sérénité d'un écosystème conçu pour votre bien-être hormonal.",
+    "btnSignup": "Créer un Accès",
+    "btnLogin": "Se Connecter"
+  },
+  "footer": {
+    "copyright": "nefertiti | © {year} Nefertiti Sanctuary.",
+    "terms": "Conditions",
+    "privacy": "Confidentialité",
+    "support": "Support"
+  },
+  "login": {
+    "titleLogin": "Bon retour",
+    "titleSignup": "Créer un compte boutique",
+    "subtitleLogin": "Connectez-vous pour accéder à votre sanctuaire hormonal.",
+    "subtitleSignup": "Rejoignez l'écosystème de santé intégrée pour femmes.",
+    "labelName": "Nom Complet",
+    "labelEmail": "Adresse E-mail",
+    "labelPassword": "Mot de passe",
+    "labelConfirmPassword": "Confirmer le Mot de passe",
+    "btnSubmitLogin": "Se Connecter",
+    "btnSubmitSignup": "Créer l'Accès",
+    "btnGoogle": "Connexion Google",
+    "or": "ou",
+    "forgotPassword": "Mot de passe oublié ?",
+    "toggleToSignup": "Pas encore de compte ? Rejoindre le Sanctuaire",
+    "toggleToLogin": "Vous avez déjà un compte ? Se Connecter",
+    "errorWeakPassword": "Le mot de passe doit contenir au moins 6 caractères.",
+    "errorInvalidEmail": "Veuillez saisir une adresse e-mail valide.",
+    "errorPasswordsMismatch": "Les mots de passe saisis ne correspondent pas.",
+    "errorUserNotFound": "Aucun utilisateur trouvé avec cet e-mail.",
+    "errorWrongPassword": "Le mot de passe saisi est incorrect.",
+    "errorGeneric": "Une erreur est survenue. Veuillez réessayer plus tard."
+  },
+  "perfil": {
+    "title": "Votre Sanctuaire Personnel",
+    "subtitle": "Gérez vos données et paramètres de confidentialité avec un chiffrement de bout en bout.",
+    "personalData": "Données Personnelles",
+    "name": "Nom",
+    "email": "E-mail",
+    "saveChanges": "Enregistrer les Modifications",
+    "logout": "Se Déconnecter",
+    "avatarUpdated": "Photo de profil mise à jour avec succès.",
+    "profileSaved": "Modifications enregistrées avec succès.",
+    "privacySettings": "Paramètres de Confidentialité",
+    "shareMedical": "Partager mes données avec mes médecins partenaires",
+    "shareMedicalDesc": "Permet aux médecins de l'écosystème de visualiser votre tableau de bord clinique en temps réel.",
+    "anonymousAnalytics": "Envoyer des données de télémétrie anonymes",
+    "anonymousAnalyticsDesc": "Aide à améliorer l'algorithme de détection de cycle sans exposer votre identité.",
+    "mfa": "Authentification à Double Facteur",
+    "mfaDesc": "Protection supplémentaire pour votre dossier médical électronique."
+  },
+  "social": {
+    "title": "Cercle de Guérison",
+    "subtitle": "Partagez des expériences, des recettes de soutien lutéal et des rituels de soin de soi avec d'autres femmes.",
+    "circles": "Cercles Actifs",
+    "newPostPlaceholder": "Partagez une réflexion, une recette ou un rituel...",
+    "btnPost": "Publier",
+    "like": "Soutenir",
+    "comment": "Répondre",
+    "share": "Partager",
+    "circle1": "Cercle Lunaire (Cycles & Rythmes)",
+    "circle2": "Alchimie Culinaire (Nutrition)",
+    "circle3": "Clinique Intégrative (Conseils)",
+    "noPosts": "Aucune publication pour le moment. Soyez la première à lancer la conversation !"
+  },
+  "faq": {
+    "title": "Questions Fréquentes",
+    "subtitle": "Réponses claires et scientifiques sur l'expérience Nefertiti.",
+    "questions": [
+      {
+        "question": "En quoi Nefertiti est-il différent des autres trackers de cycle ?",
+        "answer": "Nefertiti n'est pas seulement un calendrier. C'est une plateforme intégrée de médecine fonctionnelle féminine qui connecte vos données biologiques à des conseils nutritionnels basés sur le métabolisme et à une équipe médicale de haut niveau, le tout dans une interface sereine et sans publicité."
+      },
+      {
+        "question": "Comment mes données de santé et de cycle sont-elles protégées ?",
+        "answer": "Votre vie privée est non négociable. Nous chiffrons toutes les informations médicales dans Cloud Firestore et utilisons une authentification de niveau bancaire via Firebase. Contrairement à d'autres applications, nous ne vendons ni ne partageons jamais vos données."
+      },
+      {
+        "question": "Comment fonctionne la synchronisation avec les professionnels de santé ?",
+        "answer": "Si vous l'activez dans vos paramètres de confidentialité, les gynécologues ou endocrinologues associées à votre compte sur la plateforme pourront consulter des rapports esthétiques de votre santé hormonale pour des consultations plus efficaces, vous évitant ainsi de répéter vos symptômes."
+      },
+      {
+        "question": "Puis-je utiliser la plateforme si j'ai un cycle irrégulier ou si j'utilise des contraceptifs hormonaux ?",
+        "answer": "Oui. Nefertiti s'adapte à différents profils biologiques. Pour les personnes sous contraception hormonale, la plateforme permet de se concentrer sur la nutrition intégrative et la gestion des symptômes liés au sommeil et au stress."
+      }
+    ]
+  },
+  "cookies": {
+    "title": "Votre Vie Privée au Sanctuaire",
+    "description": "Nous utilisons des cookies pour affiner votre expérience, analyser le trafic du site et proposer des recommandations personnalisées. Veuillez sélectionner vos préférences ci-dessous.",
+    "btnAcceptAll": "Tout Accepter",
+    "btnRejectAll": "Refuser les Optionnels",
+    "btnCustomize": "Personnaliser les Préférences",
+    "btnSave": "Confirmer le Choix",
+    "necessaryTitle": "Nécessaires",
+    "necessaryDesc": "Essentiels pour l'authentification, la sécurité et la navigation de base.",
+    "analyticsTitle": "Statistiques & Analyses",
+    "analyticsDesc": "Nous aident à comprendre comment la plateforme est utilisée de manière totalement anonyme.",
+    "marketingTitle": "Marketing Intégratif",
+    "marketingDesc": "Permettent de personnaliser les suggestions de bien-être et les offres selon vos intérêts."
+  }
+}

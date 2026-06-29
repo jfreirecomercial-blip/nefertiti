@@ -1,0 +1,130 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Função auxiliar para verificar se o usuário está autenticado
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Função auxiliar para verificar se o usuário é o dono do UID fornecido
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Função auxiliar para verificar se o usuário atual é admin
+    function isAdmin() {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        ('role' in get(/databases/$(database)/documents/users/$(request.auth.uid)).data) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // 1. Coleção 'users': Apenas o dono do UID correspondente pode ler e escrever.
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // 2. Coleção 'daily_logs': Apenas o dono (userId correspondente no documento) pode ler, criar, atualizar ou deletar.
+    match /daily_logs/{logId} {
+      allow read, delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isAuthenticated() 
+        && resource.data.userId == request.auth.uid 
+        && request.resource.data.userId == request.auth.uid;
+    }
+
+    // 3. Coleção 'social_posts': Qualquer usuário logado pode ler posts marcados como públicos (ou compartilhados), 
+    // ou se ele próprio for o autor. Mas apenas o autor (userId correspondente) ou admin pode atualizar ou deletar.
+    // As fotos associadas devem estar limitadas a 10.
+    match /social_posts/{postId} {
+      allow read: if isAuthenticated() && (
+        resource.data.isPublic == true || 
+        resource.data.shared == true || 
+        resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      allow create: if isAuthenticated() 
+        && request.resource.data.userId == request.auth.uid
+        && (!('photos' in request.resource.data) || (request.resource.data.photos is list && request.resource.data.photos.size() <= 10));
+        
+      allow update: if isAuthenticated() 
+        && (resource.data.userId == request.auth.uid || isAdmin())
+        && (request.resource.data.userId == resource.data.userId)
+        && (!('photos' in request.resource.data) || (request.resource.data.photos is list && request.resource.data.photos.size() <= 10));
+        
+      allow delete: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    // 4. Coleção 'appointments': Usuários normais podem ler e escrever seus próprios agendamentos.
+    match /appointments/{appointmentId} {
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid || 
+        resource.data.professionalId == request.auth.uid || 
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid || 
+        resource.data.professionalId == request.auth.uid || 
+        isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // 5. Coleção 'professionals':
+    // - Qualquer usuário autenticado pode ler profissionais aprovados.
+    // - O dono do perfil e administradores podem ler qualquer status.
+    // - Apenas o próprio profissional pode criar/atualizar seu perfil, mas não pode alterar o status de aprovação 'approvalStatus' nem a nota média/total de avaliações.
+    // - Apenas administradores podem atualizar o 'approvalStatus'.
+    match /professionals/{professionalId} {
+      allow read: if isAuthenticated() && (
+        resource.data.approvalStatus == 'approved' || 
+        isOwner(professionalId) || 
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && isOwner(professionalId) 
+        && request.resource.data.approvalStatus == 'pending'
+        && request.resource.data.averageRating == 0
+        && request.resource.data.totalReviews == 0;
+      allow update: if isAuthenticated() && (
+        isAdmin() ||
+        (isOwner(professionalId) 
+          && request.resource.data.approvalStatus == resource.data.approvalStatus
+          && request.resource.data.averageRating == resource.data.averageRating
+          && request.resource.data.totalReviews == resource.data.totalReviews
+        ) ||
+        ( // Pacientes podem apenas atualizar os campos de avaliação
+          request.resource.data.displayName == resource.data.displayName &&
+          request.resource.data.email == resource.data.email &&
+          request.resource.data.photoURL == resource.data.photoURL &&
+          request.resource.data.specialty == resource.data.specialty &&
+          request.resource.data.bio == resource.data.bio &&
+          request.resource.data.licenseNumber == resource.data.licenseNumber &&
+          request.resource.data.priceRange == resource.data.priceRange &&
+          request.resource.data.approvalStatus == resource.data.approvalStatus &&
+          request.resource.data.identityUrl == resource.data.identityUrl &&
+          request.resource.data.certificateUrl == resource.data.certificateUrl
+        )
+      );
+      allow delete: if isAdmin();
+    }
+
+    // 6. Coleção 'reviews':
+    // - Qualquer usuário autenticado pode ler reviews.
+    // - Apenas clientes (usuários logados) podem criar uma review. A review precisa ser criada por um autor autêntico.
+    // - O autor e admins podem atualizar/deletar.
+    match /reviews/{reviewId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() 
+        && request.resource.data.authorId == request.auth.uid
+        && request.resource.data.rating >= 1 && request.resource.data.rating <= 5;
+      allow update: if isAuthenticated() 
+        && (resource.data.authorId == request.auth.uid || isAdmin())
+        && request.resource.data.authorId == resource.data.authorId
+        && request.resource.data.professionalId == resource.data.professionalId;
+      allow delete: if isAuthenticated() && (resource.data.authorId == request.auth.uid || isAdmin());
+    }
+  }
+}

@@ -1,0 +1,54 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Função auxiliar para verificar se o usuário está autenticado
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Regras de fotos de perfil: users/{userId}/profile.jpg
+    match /users/{userId}/profile.jpg {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() 
+        && request.auth.uid == userId
+        && request.resource.contentType.matches('image/.*')
+        && request.resource.size <= 1024 * 1024;
+    }
+
+    // Regras de fotos de posts: users/{userId}/posts/{allPaths=**}
+    match /users/{userId}/posts/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() 
+        && request.auth.uid == userId
+        && request.resource.contentType.matches('image/.*')
+        && request.resource.size <= 1024 * 1024;
+    }
+
+    // Regras auxiliares para admin
+    function isAdmin() {
+      return isAuthenticated() && 
+        firestore.exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+        ('role' in firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data) &&
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Documentos confidenciais de identidade das profissionais
+    match /identity/{userId}/{allPaths=**} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow write: if isAuthenticated() 
+        && request.auth.uid == userId
+        && (request.resource.contentType.matches('image/.*') || request.resource.contentType.matches('application/pdf'))
+        && request.resource.size <= 5 * 1024 * 1024;
+    }
+
+    // Certificados/Diplomas das profissionais
+    match /certificates/{userId}/{allPaths=**} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow write: if isAuthenticated() 
+        && request.auth.uid == userId
+        && (request.resource.contentType.matches('image/.*') || request.resource.contentType.matches('application/pdf'))
+        && request.resource.size <= 5 * 1024 * 1024;
+    }
+  }
+}

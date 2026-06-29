@@ -59,3 +59,31 @@ export interface Appointment {
   createdAt: string; // ISO String
   updatedAt: string; // ISO String
 }
+
+export interface ProfessionalProfile {
+  uid: string;
+  displayName: string;
+  email: string;
+  photoURL?: string;
+  specialty: "ginecologista" | "nutricionista" | "psicologa" | "endocrinologista" | "obstetra" | "doula";
+  bio: string;
+  licenseNumber: string; // Ex: CRM, CRP
+  priceRange?: string; // Opcional
+  approvalStatus: "pending" | "approved" | "rejected";
+  identityUrl: string; // Documento de identidade privado
+  certificateUrl: string; // Certificado/Diploma privado
+  averageRating: number;
+  totalReviews: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProfessionalReview {
+  id: string;
+  professionalId: string;
+  authorId: string;
+  authorName: string;
+  rating: number; // 1 a 5
+  comment: string;
+  createdAt: string;
+}

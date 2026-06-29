@@ -1,0 +1,181 @@
+{
+  "nav": {
+    "proposta": "Proposal",
+    "ritmo": "The Rhythm",
+    "manifesto": "Manifesto",
+    "entrar": "Sign In",
+    "fazerParte": "Join Sanctuary"
+  },
+  "hero": {
+    "badge": "Self-care Reconfigured",
+    "title1": "The cycle is your",
+    "title2": "power",
+    "title3": ", not your limit.",
+    "description": "Nefertiti redefines the female health experience. Away from cold, robotic metrics, we propose an aesthetic and scientific ritual of hormonal tracking, integrative nutrition, and holistic well-being.",
+    "btnBoutique": "Create Boutique Account",
+    "btnExplore": "Explore Method",
+    "badgeText": "High-fidelity platform designed exclusively for cyclical female biology.",
+    "floatingBadge": "Hormonal Phase",
+    "floatingValue": "Estrogen peak"
+  },
+  "cardFase": {
+    "badge": "Internal Rhythm",
+    "defaultPhase": "Follicular Phase",
+    "dayOf": "Day {day} of {duration}",
+    "follicularGrowth": "Follicular Growth",
+    "nutritionTitle": "Regenerative Nutrition",
+    "nutritionDesc": "Your energy is ascending with rising estrogen. Focus on light foods that stimulate digestion and provide essential micronutrients.",
+    "bioFocus": "Biochemical Focus",
+    "foods": [
+      "Broccoli sprouts",
+      "Sunflower seeds",
+      "Organic avocado",
+      "Berries"
+    ],
+    "hydrationTitle": "Ritual Hydration",
+    "registerWater": "Log 250ml of water"
+  },
+  "ritmo": {
+    "badge": "Synchronicity",
+    "title": "A refined look at every moment of your cycle.",
+    "item1": {
+      "num": "01/",
+      "title": "Conscious Biological Monitoring",
+      "desc": "No gray flowcharts or complex spreadsheets. Our interface translates your temperature, mood, and hormonal data into an elegant visual narrative, offering insights that naturally adapt to your real daily routine.",
+      "visualTitle": "Healthy Fluctuation",
+      "visualDesc": "Your estrogen and progesterone act like tides. We help you understand the cognitive and physical shifts of every wave."
+    },
+    "item2": {
+      "num": "02/",
+      "title": "Nutrition Tuned with Metabolism",
+      "desc": "Your basal metabolic rate changes throughout the month. Nefertiti guides your functional nutrition week by week, recommending dishes and superfoods that work in harmony with your hormones, instead of imposing generic restrictive diets.",
+      "visualTitle": "Nutrient Synergy",
+      "visualDesc": "Precisely suggested foods to support metabolic peaks of the luteal phase or replenish iron during menstruation."
+    },
+    "item3": {
+      "num": "03/",
+      "title": "Digital Boutique Clinic",
+      "desc": "We connect you to an elite medical team — integrative gynecologists, endocrinologists, and therapists focused on female well-being. With teleconsultations and medical records synchronized with your daily logs, care becomes seamless and intimate.",
+      "visualTitle": "Integrative Advice",
+      "visualDesc": "Your partner physicians have access to your symptom and nutrition diary, eliminating repetitive conversations and delivering precise diagnostics."
+    }
+  },
+  "manifesto": {
+    "badge": "Our Manifesto",
+    "quote": "We believe that technology should embrace the nature of the female body, creating digital healing spaces that inspire beauty, calm, and self-knowledge."
+  },
+  "seguranca": {
+    "badge": "Boutique Security",
+    "title": "Encrypted records, non-negotiable privacy.",
+    "description": "Unlike traditional cycle apps that monetize personal data, Nefertiti is structured on the highest standards of international medical compliance. Your symptom and consultation data are protected by Firebase Authentication and encrypted directly in Cloud Firestore.",
+    "warning": "No health data is shared with third parties or used for marketing purposes. Your hormonal sovereignty is protected.",
+    "archTitle": "Security Architecture",
+    "item1": "TLS encryption in transit and AES-256 at rest.",
+    "item2": "SSR validation with Firebase Admin session tokens.",
+    "item3": "Compliant with international HIPAA and LGPD regulations."
+  },
+  "cta": {
+    "title1": "Become a member of",
+    "title2": "Nefertiti Sanctuary",
+    "description": "Create your initial access and experience the serenity of an ecosystem designed for your hormonal well-being.",
+    "btnSignup": "Create Access",
+    "btnLogin": "Sign In"
+  },
+  "footer": {
+    "copyright": "nefertiti | © {year} Nefertiti Sanctuary.",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "support": "Support"
+  },
+  "login": {
+    "titleLogin": "Welcome back",
+    "titleSignup": "Create boutique account",
+    "subtitleLogin": "Sign in to access your hormonal sanctuary.",
+    "subtitleSignup": "Join the integrated ecosystem of female health.",
+    "labelName": "Full Name",
+    "labelEmail": "Email Address",
+    "labelPassword": "Password",
+    "labelConfirmPassword": "Confirm Password",
+    "btnSubmitLogin": "Sign In",
+    "btnSubmitSignup": "Create Access",
+    "btnGoogle": "Google Login",
+    "or": "or",
+    "forgotPassword": "Forgot your password?",
+    "toggleToSignup": "Don't have an account? Join Sanctuary",
+    "toggleToLogin": "Already have an account? Sign In",
+    "errorWeakPassword": "Password must be at least 6 characters long.",
+    "errorInvalidEmail": "Enter a valid email address.",
+    "errorPasswordsMismatch": "Entered passwords do not match.",
+    "errorUserNotFound": "No user found with this email.",
+    "errorWrongPassword": "The entered password is incorrect.",
+    "errorGeneric": "An error occurred. Please try again later."
+  },
+  "perfil": {
+    "title": "Your Personal Sanctuary",
+    "subtitle": "Manage your data and privacy settings with end-to-end encryption.",
+    "personalData": "Personal Data",
+    "name": "Name",
+    "email": "Email",
+    "saveChanges": "Save Changes",
+    "logout": "Log Out",
+    "avatarUpdated": "Profile picture updated successfully.",
+    "profileSaved": "Changes saved successfully.",
+    "privacySettings": "Privacy Settings",
+    "shareMedical": "Share data with my partner doctors",
+    "shareMedicalDesc": "Allows doctors within the ecosystem to view your clinical dashboard in real time.",
+    "anonymousAnalytics": "Send anonymous analytical telemetry",
+    "anonymousAnalyticsDesc": "Helps improve the cycle detection algorithm without exposing your identity.",
+    "mfa": "Two-Factor Authentication",
+    "mfaDesc": "Additional protection for your electronic medical record."
+  },
+  "social": {
+    "title": "Healing Circle",
+    "subtitle": "Share experiences, luteal support recipes, and self-care rituals with other women.",
+    "circles": "Active Circles",
+    "newPostPlaceholder": "Share a reflection, recipe, or ritual...",
+    "btnPost": "Publish",
+    "like": "Support",
+    "comment": "Reply",
+    "share": "Share",
+    "circle1": "Lunar Circle (Cycles & Rhythms)",
+    "circle2": "Kitchen Alchemy (Nutrition)",
+    "circle3": "Integrative Clinic (Advice)",
+    "noPosts": "No posts at the moment. Be the first to light up the conversation!"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Clear, scientific answers about the Nefertiti experience.",
+    "questions": [
+      {
+        "question": "What makes Nefertiti different from other cycle trackers?",
+        "answer": "Nefertiti is not just a calendar. It is an integrated female functional medicine platform that connects your biological data with metabolic-based dietary suggestions and a boutique health team, all within a serene, ad-free interface."
+      },
+      {
+        "question": "How are my health and cycle data protected?",
+        "answer": "Your privacy is non-negotiable. We encrypt all medical information in Cloud Firestore and use bank-level authentication through Firebase. Unlike other apps, we never sell or share your data with third parties."
+      },
+      {
+        "question": "How does synchronization with healthcare professionals work?",
+        "answer": "If you enable it in your privacy settings, the gynecologists or endocrinologists associated with your account on the platform will be able to view aesthetic reports of your hormonal health for more efficient consultations, avoiding the need to repeatedly report symptoms."
+      },
+      {
+        "question": "Can I use the platform if I have an irregular cycle or use hormonal contraceptives?",
+        "answer": "Yes. Nefertiti adapts to different biological profiles. For those using hormonal contraceptives, the platform helps focus on integrative nutrition and supporting symptoms related to stress and sleep."
+      }
+    ]
+  },
+  "cookies": {
+    "title": "Your Privacy at the Sanctuary",
+    "description": "We use cookies to refine your experience, analyze site traffic, and deliver personalized recommendations. Please select your preferences below.",
+    "btnAcceptAll": "Accept All",
+    "btnRejectAll": "Decline Optional",
+    "btnCustomize": "Customize Preferences",
+    "btnSave": "Confirm Selection",
+    "necessaryTitle": "Necessary",
+    "necessaryDesc": "Essential for authentication, security, and basic navigation.",
+    "analyticsTitle": "Statistics & Analytics",
+    "analyticsDesc": "Helps us understand how the platform is used in a completely anonymous way.",
+    "marketingTitle": "Integrative Marketing",
+    "marketingDesc": "Allows us to personalize wellness suggestions and offers according to your interests."
+  }
+}
