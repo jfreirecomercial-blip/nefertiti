@@ -177,5 +177,76 @@
     "analyticsDesc": "Nous aident à comprendre comment la plateforme est utilisée de manière totalement anonyme.",
     "marketingTitle": "Marketing Intégratif",
     "marketingDesc": "Permettent de personnaliser les suggestions de bien-être et les offres selon vos intérêts."
+  },
+  "compliance": {
+    "title": "Conformité et Règles par Pays",
+    "regions": {
+      "br": {
+        "name": "Brésil",
+        "law": "LGPD (Loi générale sur la protection des données)",
+        "description": "Garantit un contrôle total sur les données de santé sensibles. Le traitement est fondé sur le consentement exprès et la protection de la santé.",
+        "rights": [
+          "Confirmation et Accès aux données de cycle",
+          "Correction des données incomplètes ou inexactes",
+          "Suppression définitive des données personnelles (Droit à l'oubli)",
+          "Portabilité des données de santé vers une autre plateforme"
+        ]
+      },
+      "eu": {
+        "name": "Union Européenne",
+        "law": "RGPD (Règlement Général sur la Protection des Données)",
+        "description": "Régmentation stricte traitant les données de santé menstruelle comme une catégorie spéciale (Art. 9). Exige un consentement explicite et une sécurité active.",
+        "rights": [
+          "Right to be Forgotten (Supprimer le compte définitivement)",
+          "Data Portability (Exportation complète au format JSON)",
+          "Right to Access and Rectify (Consulter et corriger les enregistrements)",
+          "Restrict Processing (Désactiver la télémétrie ou le partage)"
+        ]
+      },
+      "us": {
+        "name": "États-Unis",
+        "law": "Norme de Conformité CCPA / HIPAA",
+        "description": "Conforme aux principes HIPAA et CCPA pour la protection des dossiers médicaux électroniques et la non-commercialisation des données de consommation.",
+        "rights": [
+          "Right to Know & Access (Savoir quelles données sont collectées)",
+          "Right to Delete (Suppression des données sur demande)",
+          "Strict Non-Sale (Garantie de non-commercialisation des enregistrements)",
+          "Protected Health Information (PHI) encryption standards"
+        ]
+      },
+      "ca": {
+        "name": "Canada",
+        "law": "PIPEDA (Personal Info Protection Act)",
+        "description": "Accent mis sur la limitation de la collecte, un consentement significatif et des garanties technologiques avancées pour les données de santé numérique.",
+        "rights": [
+          "Limiting Collection (Seules les données nécessaires à la prédiction)",
+          "Individual Access (Accès complet et immédiat aux rapports)",
+          "Challenging Compliance (Canaux de soutien juridique direct)",
+          "Advanced Safeguards (Chiffrement AES-256 au repos)"
+        ]
+      },
+      "jp": {
+        "name": "Japon",
+        "law": "APPI (Act on the Protection of Personal Information)",
+        "description": "Règles spécifiques pour les informations nécessitant une attention particulière (données médicales). Exige une approbation claire pour le partage avec des partenaires.",
+        "rights": [
+          "Restriction of Third-Party Provision (Interdiction d'envoi à des tiers)",
+          "Suspension of Use (Pause temporaire du traitement)",
+          "Disclosure and Correction (Accès simplifié et rectification)",
+          "Anonymized Information handling rules for algorithms"
+        ]
+      },
+      "global": {
+        "name": "International / Global",
+        "law": "Standard Privacy & Cybersecurity Framework",
+        "description": "Applicable à toutes les utilisatrices dans les régions sans législation locale spécifique. Combine les meilleures pratiques du RGPD et la confidentialité dès la conception.",
+        "rights": [
+          "Souveraineté Absolue sur les données biologiques",
+          "Sécurité cryptographique de niveau bancaire",
+          "Exportação livre e portabilidade simplificada",
+          "Suppression instantanée de compte sans bureaucratie"
+        ]
+      }
+    }
   }
 }

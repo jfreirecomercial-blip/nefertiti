@@ -200,5 +200,76 @@
     "btnSubmitCode": "Sincronizar Ciclos",
     "invalidCode": "Código inválido ou expirado.",
     "successLink": "Sincronização realizada com sucesso! Redirecionando..."
+  },
+  "compliance": {
+    "title": "Conformidade e Regras por País",
+    "regions": {
+      "br": {
+        "name": "Brasil",
+        "law": "LGPD (Lei Geral de Proteção de Dados)",
+        "description": "Garante controle total sobre dados sensíveis de saúde. O tratamento é fundamentado no consentimento expresso e na tutela da saúde.",
+        "rights": [
+          "Confirmação e Acesso aos dados de ciclo",
+          "Correção de dados incompletos ou inexatos",
+          "Eliminação definitiva dos dados pessoais (Esquecimento)",
+          "Portabilidade dos dados de saúde para outra plataforma"
+        ]
+      },
+      "eu": {
+        "name": "União Europeia",
+        "law": "GDPR (General Data Protection Regulation)",
+        "description": "Regulamento rigoroso que trata dados de saúde menstrual como categoria especial (Art. 9º). Exige consentimento explícito e segurança ativa.",
+        "rights": [
+          "Right to be Forgotten (Excluir conta permanentemente)",
+          "Data Portability (Exportação completa em formato JSON)",
+          "Right to Access and Rectify (Visualizar e corrigir registros)",
+          "Restrict Processing (Desativar telemetria ou compartilhamento)"
+        ]
+      },
+      "us": {
+        "name": "Estados Unidos",
+        "law": "CCPA / HIPAA Compliance Standard",
+        "description": "Em conformidade com os princípios da HIPAA e CCPA para proteção de registros médicos eletrônicos e não mercantilização de dados de consumo.",
+        "rights": [
+          "Right to Know & Access (Saber quais dados são coletados)",
+          "Right to Delete (Exclusão sob demanda)",
+          "Strict Non-Sale (Garantia de não comercialização)",
+          "Protected Health Information (PHI) encryption standards"
+        ]
+      },
+      "ca": {
+        "name": "Canadá",
+        "law": "PIPEDA (Personal Info Protection Act)",
+        "description": "Foco na limitação da coleta, consentimento significativo e salvaguardas tecnológicas avançadas para dados de saúde digital.",
+        "rights": [
+          "Limiting Collection (Apenas dados necessários para predição)",
+          "Individual Access (Acesso completo e imediato aos relatórios)",
+          "Challenging Compliance (Canais diretos de suporte legal)",
+          "Advanced Safeguards (Criptografia AES-256 em repouso)"
+        ]
+      },
+      "jp": {
+        "name": "Japão",
+        "law": "APPI (Act on the Protection of Personal Information)",
+        "description": "Regras específicas para Informações que Requerem Consideração Especial (dados médicos). Exige aprovação clara para compartilhamento com parceiros.",
+        "rights": [
+          "Restriction of Third-Party Provision (Proibição de envio a terceiros)",
+          "Suspension of Use (Pausa temporária de processamento)",
+          "Disclosure and Correction (Acesso simplificado e retificação)",
+          "Anonymized Information handling rules for algorithms"
+        ]
+      },
+      "global": {
+        "name": "Internacional / Global",
+        "law": "Standard Privacy & Cybersecurity Framework",
+        "description": "Aplicável a todas as usuárias em regiões sem legislação local específica. Combina as melhores práticas do GDPR e da privacidade desde a concepção.",
+        "rights": [
+          "Soberania Absoluta sobre dados biológicos",
+          "Segurança criptográfica de nível bancário",
+          "Exportação livre e portabilidade simplificada",
+          "Exclusão instantânea de conta sem burocracia"
+        ]
+      }
+    }
   }
 }

@@ -200,5 +200,76 @@
     "btnSubmitCode": "Synchronize Cycles",
     "invalidCode": "Invalid or expired code.",
     "successLink": "Synchronization successful! Redirecting..."
+  },
+  "compliance": {
+    "title": "Compliance and Rules by Country",
+    "regions": {
+      "br": {
+        "name": "Brazil",
+        "law": "LGPD (General Data Protection Law)",
+        "description": "Guarantees full control over sensitive health data. Processing is based on express consent and health protection.",
+        "rights": [
+          "Confirmation and Access to cycle data",
+          "Correction of incomplete or inaccurate data",
+          "Definitive deletion of personal data (Right to be Forgotten)",
+          "Data portability of health data to another platform"
+        ]
+      },
+      "eu": {
+        "name": "European Union",
+        "law": "GDPR (General Data Protection Regulation)",
+        "description": "Strict regulation that treats menstrual health data as a special category (Art. 9). Requires explicit consent and active security.",
+        "rights": [
+          "Right to be Forgotten (Delete account permanently)",
+          "Data Portability (Full export in JSON format)",
+          "Right to Access and Rectify (View and correct records)",
+          "Restrict Processing (Disable telemetry or sharing)"
+        ]
+      },
+      "us": {
+        "name": "United States",
+        "law": "CCPA / HIPAA Compliance Standard",
+        "description": "In compliance with HIPAA and CCPA principles for electronic medical record protection and non-commercialization of consumer data.",
+        "rights": [
+          "Right to Know & Access (Know what data is collected)",
+          "Right to Delete (Delete data on demand)",
+          "Strict Non-Sale (Guarantee that records are not sold)",
+          "Protected Health Information (PHI) encryption standards"
+        ]
+      },
+      "ca": {
+        "name": "Canada",
+        "law": "PIPEDA (Personal Info Protection Act)",
+        "description": "Focus on limiting collection, meaningful consent, and advanced technological safeguards for digital health data.",
+        "rights": [
+          "Limiting Collection (Only data necessary for prediction)",
+          "Individual Access (Full and immediate access to reports)",
+          "Challenging Compliance (Direct legal support channels)",
+          "Advanced Safeguards (AES-256 encryption at rest)"
+        ]
+      },
+      "jp": {
+        "name": "Japan",
+        "law": "APPI (Act on the Protection of Personal Information)",
+        "description": "Specific rules for Information Requiring Special Consideration (medical data). Requires clear approval for sharing with partners.",
+        "rights": [
+          "Restriction of Third-Party Provision (Proibition of sending to third parties)",
+          "Suspension of Use (Temporary processing pause)",
+          "Disclosure and Correction (Simplified access and rectification)",
+          "Anonymized Information handling rules for algorithms"
+        ]
+      },
+      "global": {
+        "name": "International / Global",
+        "law": "Standard Privacy & Cybersecurity Framework",
+        "description": "Applicable to all users in regions without specific local legislation. Combines GDPR best practices and privacy by design.",
+        "rights": [
+          "Absolute Sovereignty over biological data",
+          "Bank-grade cryptographic security",
+          "Free export and simplified portability",
+          "Instant account deletion without bureaucracy"
+        ]
+      }
+    }
   }
 }
