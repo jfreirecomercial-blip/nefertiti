@@ -56,8 +56,4 @@ env:
       - BUILD
       - RUNTIME
 
-  # Spoonacular API Key (server-side only, kept private)
-  - variable: SPOONACULAR_API_KEY
-    secret: spoonacular_api_key
-    availability:
-      - RUNTIME
+
