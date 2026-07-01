@@ -899,9 +899,6 @@ export default function ProfilePage() {
           <div className="bg-white/70 border border-sand-200/50 rounded-[2.5rem] p-8 shadow-sm">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <span className="text-[9px] bg-olive-50 text-olive-600 font-bold px-2.5 py-1 rounded-md border border-olive-100 uppercase tracking-widest inline-block mb-2">
-                  Spoonacular API
-                </span>
                 <h3 className="font-serif text-2xl text-spa-dark font-light tracking-wide">
                   Nutrição Sincronizada com o Ciclo
                 </h3>
