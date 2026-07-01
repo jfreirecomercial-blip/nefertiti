@@ -67,6 +67,21 @@ function LoginForm() {
     }
   };
 
+  const syncUserRole = async (user: any) => {
+    try {
+      const idToken = await user.getIdToken();
+      await fetch("/api/auth/promote", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${idToken}`
+        }
+      });
+    } catch (err) {
+      console.error("Erro ao sincronizar permissões:", err);
+    }
+  };
+
   const handleGoogleSignIn = async () => {
     setError("");
     setSuccess(false);
@@ -75,6 +90,7 @@ function LoginForm() {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       await createInitialUserDoc(result.user, result.user.displayName || "");
+      await syncUserRole(result.user);
       setSuccessMsg(t("login.successLogin") || "Login realizado com sucesso! Redirecionando...");
       setSuccess(true);
       setTimeout(() => {
@@ -96,7 +112,8 @@ function LoginForm() {
 
     try {
       if (mode === "login") {
-        await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        await syncUserRole(userCredential.user);
         setSuccessMsg(t("login.successLogin") || "Login realizado com sucesso! Redirecionando...");
         setSuccess(true);
         setTimeout(() => {
@@ -112,6 +129,7 @@ function LoginForm() {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(userCredential.user, { displayName: name });
         await createInitialUserDoc(userCredential.user, name);
+        await syncUserRole(userCredential.user);
         setSuccessMsg(t("login.successSignup") || "Conta criada com sucesso! Redirecionando...");
         setSuccess(true);
         setTimeout(() => {
