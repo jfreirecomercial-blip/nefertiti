@@ -35,15 +35,17 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.partnerId == ownerId;
     }
 
-    // 1. Coleção 'users': O dono pode ler e escrever. O parceiro cúmplice pode apenas ler para ver o ciclo.
+    // 1. Coleção 'users': O dono pode ler e escrever. O parceiro cúmplice pode apenas ler para ver o ciclo. O admin tem acesso total para gestão.
     match /users/{userId} {
-      allow read: if isOwner(userId) || isPartnerOf(userId);
+      allow read: if isOwner(userId) || isPartnerOf(userId) || isAdmin();
       allow create: if isOwner(userId) 
         && (!('role' in request.resource.data) || request.resource.data.role == 'member')
         && (!('partnerId' in request.resource.data));
-      allow update: if isOwner(userId)
+      allow update: if isAdmin() || (
+        isOwner(userId)
         && (!('role' in request.resource.data) || request.resource.data.role == resource.data.role)
-        && (!('partnerId' in request.resource.data) || request.resource.data.partnerId == resource.data.partnerId);
+        && (!('partnerId' in request.resource.data) || request.resource.data.partnerId == resource.data.partnerId)
+      );
     }
 
     // 2. Coleção 'daily_logs': O dono pode ler/escrever. O parceiro cúmplice pode apenas ler os logs de sintomas.
@@ -59,8 +61,10 @@ service cloud.firestore {
     // 3. Coleção 'social_posts': Parceiros cúmplices não têm acesso a nenhuma parte social (postagens, comentários, curtidas).
     match /social_posts/{postId} {
       allow read: if isAuthenticated() && !isPartner() && (
-        resource.data.isPublic == true || 
-        resource.data.shared == true || 
+        (
+          (resource.data.isPublic == true || resource.data.shared == true) &&
+          (!('status' in resource.data) || resource.data.status != 'suspended')
+        ) || 
         resource.data.userId == request.auth.uid ||
         isAdmin()
       );
@@ -70,7 +74,14 @@ service cloud.firestore {
         && (!('photos' in request.resource.data) || (request.resource.data.photos is list && request.resource.data.photos.size() <= 10));
         
       allow update: if isAuthenticated() && !isPartner()
-        && (resource.data.userId == request.auth.uid || isAdmin())
+        && (
+          (resource.data.userId == request.auth.uid || isAdmin())
+          ||
+          (
+            request.resource.data.status == 'suspended' &&
+            request.resource.data.userId == resource.data.userId
+          )
+        )
         && (request.resource.data.userId == resource.data.userId)
         && (!('photos' in request.resource.data) || (request.resource.data.photos is list && request.resource.data.photos.size() <= 10));
         
@@ -145,6 +156,26 @@ service cloud.firestore {
         && request.resource.data.authorId == resource.data.authorId
         && request.resource.data.professionalId == resource.data.professionalId;
       allow delete: if isAuthenticated() && (resource.data.authorId == request.auth.uid || isAdmin());
+    }
+
+    // 7. Coleção 'reports' (Denúncias):
+    // - Qualquer usuário autenticado (que não seja parceiro) pode criar denúncias.
+    // - Apenas admins podem ler, atualizar ou excluir denúncias.
+    match /reports/{reportId} {
+      allow create: if isAuthenticated() && !isPartner()
+        && request.resource.data.reporterId == request.auth.uid;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // 8. Coleção 'notifications' (Notificações):
+    // - O usuário pode ler suas próprias notificações.
+    // - Admins podem criar e gerenciar qualquer notificação.
+    // - Usuários podem criar/atualizar notificações para si mesmos.
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && (request.resource.data.userId == request.auth.uid || isAdmin());
+      allow update: if isAuthenticated() && (request.resource.data.userId == request.auth.uid || isAdmin());
+      allow delete: if isAuthenticated() && (request.resource.data.userId == request.auth.uid || isAdmin());
     }
   }
 }

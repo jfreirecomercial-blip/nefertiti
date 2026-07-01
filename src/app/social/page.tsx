@@ -14,7 +14,8 @@ import {
   doc,
   getDoc,
   deleteDoc,
-  updateDoc
+  updateDoc,
+  addDoc
 } from "firebase/firestore";
 import { 
   Heart, 
@@ -29,7 +30,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Edit,
-  Trash2
+  Trash2,
+  Flag
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import LanguageSelector from "@/components/ui/LanguageSelector";
@@ -98,6 +100,13 @@ export default function SocialPage() {
     return () => unsubscribe();
   }, [router]);
 
+  // Report states
+  const [reportingPost, setReportingPost] = useState<Post | null>(null);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportReason, setReportReason] = useState("inappropriate");
+  const [reportDetails, setReportDetails] = useState("");
+  const [reportingSubmitting, setReportingSubmitting] = useState(false);
+
   // Load posts
   async function loadFeed() {
     setFeedLoading(true);
@@ -110,6 +119,9 @@ export default function SocialPage() {
       const loadedPosts: Post[] = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
+        // Filtrar posts suspensos no lado do cliente para evitar necessidade de índices compostos complexos no Firebase
+        if (data.status === "suspended") return;
+        
         loadedPosts.push({
           id: doc.id,
           userId: data.userId,
@@ -124,14 +136,68 @@ export default function SocialPage() {
       });
       
       setPosts(loadedPosts);
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error("Erro ao carregar feed:", err);
-      // Caso a coleção ainda não exista no Firebase, exibiremos uma mensagem vazia
       setErrorMessage("Não foi possível carregar as publicações. Certifique-se de que a coleção exista.");
     } finally {
       setFeedLoading(false);
     }
   }
+
+  // Handle post report action
+  const handleReportPost = async () => {
+    if (!reportingPost || !user) return;
+    setReportingSubmitting(true);
+    setErrorMessage("");
+    setSuccessMessage("");
+    try {
+      // 1. Criar denúncia na coleção 'reports'
+      const reportsRef = collection(db, "reports");
+      await addDoc(reportsRef, {
+        postId: reportingPost.id,
+        postContent: reportingPost.content || "",
+        postAuthorId: reportingPost.userId,
+        postAuthorName: reportingPost.userName,
+        reporterId: user.uid,
+        reporterName: user.displayName || "Membro",
+        reason: reportReason,
+        details: reportDetails.trim(),
+        status: "pending",
+        createdAt: new Date().toISOString()
+      });
+
+      // 2. Definir status do post como suspenso
+      const postRef = doc(db, "social_posts", reportingPost.id);
+      await updateDoc(postRef, {
+        status: "suspended",
+        updatedAt: new Date().toISOString()
+      });
+
+      // 3. Criar notificação para a autora do post em 'notifications'
+      const notificationsRef = collection(db, "notifications");
+      await addDoc(notificationsRef, {
+        userId: reportingPost.userId,
+        type: "post_suspended",
+        title: "Relato em Avaliação",
+        message: "Um de seus relatos foi suspenso temporariamente após denúncias e está sob análise da nossa equipe de moderação.",
+        postId: reportingPost.id,
+        read: false,
+        createdAt: new Date().toISOString()
+      });
+
+      setSuccessMessage("O relato foi denunciado e suspenso temporariamente para análise.");
+      setShowReportModal(false);
+      setReportingPost(null);
+      setReportReason("inappropriate");
+      setReportDetails("");
+      loadFeed();
+    } catch (err: any) {
+      console.error("Erro ao denunciar postagem:", err);
+      setErrorMessage("Erro ao enviar denúncia: " + err.message);
+    } finally {
+      setReportingSubmitting(false);
+    }
+  };
 
   // Handle image selections (up to 10 photos)
   const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -449,12 +515,91 @@ export default function SocialPage() {
                 isAdmin={isAdmin}
                 onDelete={handleDeletePost}
                 onEdit={handleEditPost}
+                onReport={(p) => {
+                  setReportingPost(p);
+                  setShowReportModal(true);
+                }}
               />
             ))
           )}
         </div>
 
       </main>
+
+      {/* Modal de Denúncia */}
+      {showReportModal && reportingPost && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div className="bg-white border border-sand-200 rounded-[2.5rem] p-6 max-w-md w-full shadow-xl space-y-5 animate-scaleUp">
+            <div className="flex items-center justify-between border-b border-sand-100 pb-3">
+              <h3 className="font-serif text-lg text-spa-dark font-light flex items-center gap-2">
+                <Flag className="w-4 h-4 text-quartz-400" />
+                Denunciar Publicação
+              </h3>
+              <button 
+                onClick={() => { setShowReportModal(false); setReportingPost(null); }}
+                className="p-1 rounded-full text-spa-light hover:bg-sand-50 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <p className="text-xs text-spa-medium font-light leading-relaxed">
+                Ajude-nos a manter o círculo seguro. Por que você está denunciando o relato de <strong className="font-bold">{reportingPost.userName}</strong>?
+              </p>
+
+              <div className="space-y-2">
+                <label className="block text-[9px] uppercase font-bold tracking-widest text-spa-light">Motivo principal</label>
+                <select
+                  value={reportReason}
+                  onChange={(e) => setReportReason(e.target.value)}
+                  className="w-full p-3 bg-ivory border border-sand-200 rounded-xl text-xs text-spa-dark outline-none font-medium focus:ring-1 focus:ring-quartz-300"
+                >
+                  <option value="inappropriate">Conteúdo Inadequado / Ofensivo</option>
+                  <option value="harassment">Assédio / Bullying</option>
+                  <option value="spam">Spam / Propaganda não autorizada</option>
+                  <option value="misinformation">Desinformação sobre saúde</option>
+                  <option value="other">Outro motivo</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-[9px] uppercase font-bold tracking-widest text-spa-light">Detalhes adicionais (opcional)</label>
+                <textarea
+                  value={reportDetails}
+                  onChange={(e) => setReportDetails(e.target.value)}
+                  placeholder="Forneça mais contexto para ajudar os administradores a avaliar..."
+                  rows={3}
+                  className="w-full p-3 bg-ivory border border-sand-200 rounded-xl text-xs text-spa-dark outline-none font-light leading-relaxed resize-none focus:ring-1 focus:ring-quartz-300"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3 justify-end border-t border-sand-100 pt-4">
+              <button
+                onClick={() => { setShowReportModal(false); setReportingPost(null); }}
+                className="py-2.5 px-5 border border-sand-200 rounded-full text-[10px] font-bold uppercase tracking-wider text-spa-medium hover:bg-sand-50 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleReportPost}
+                disabled={reportingSubmitting}
+                className="py-2.5 px-6 bg-quartz-400 hover:bg-quartz-500 text-white rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors disabled:bg-sand-200 flex items-center gap-1.5 cursor-pointer"
+              >
+                {reportingSubmitting ? (
+                  <span className="w-3 h-3 border-2 border-white border-t-transparent animate-spin rounded-full" />
+                ) : (
+                  <>
+                    <Flag className="w-3 h-3 fill-white/10" />
+                    Enviar Denúncia
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
@@ -466,13 +611,15 @@ function PostCard({
   currentUser, 
   isAdmin, 
   onDelete, 
-  onEdit 
+  onEdit,
+  onReport
 }: { 
   post: Post; 
   currentUser: User | null; 
   isAdmin: boolean; 
   onDelete: (id: string) => void; 
   onEdit: (id: string, text: string) => Promise<boolean>;
+  onReport: (post: Post) => void;
 }) {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(post.likesCount);
@@ -525,7 +672,7 @@ function PostCard({
           </div>
         </div>
 
-        {canManage && !isEditing && (
+        {canManage && !isEditing ? (
           <div className="flex items-center gap-2">
             <button 
               onClick={() => setIsEditing(true)}
@@ -542,6 +689,17 @@ function PostCard({
               <Trash2 className="w-3.5 h-3.5" />
             </button>
           </div>
+        ) : (
+          currentUser && post.userId !== currentUser.uid && !isEditing && (
+            <button 
+              onClick={() => onReport(post)}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-quartz-100 text-[10px] font-bold text-quartz-600 hover:bg-quartz-50 hover:text-quartz-500 transition-all cursor-pointer bg-white"
+              title="Denunciar publicação"
+            >
+              <Flag className="w-3 h-3 text-quartz-400" />
+              <span>Denunciar</span>
+            </button>
+          )
         )}
       </div>
 

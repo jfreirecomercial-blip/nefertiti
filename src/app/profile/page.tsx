@@ -69,6 +69,10 @@ export default function ProfilePage() {
   const [photoLoading, setPhotoLoading] = useState(false);
   const [photoURL, setPhotoURL] = useState("");
 
+  // Notifications state
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [loadingNotifications, setLoadingNotifications] = useState(false);
+
   // Import states
   const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
   const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
@@ -112,6 +116,27 @@ export default function ProfilePage() {
       setRecipesError(err.message || "Não foi possível carregar as sugestões nutricionais.");
     } finally {
       setRecipesLoading(false);
+    }
+  };
+
+  const loadNotifications = async (userId: string) => {
+    setLoadingNotifications(true);
+    try {
+      const q = query(
+        collection(db, "notifications"),
+        where("userId", "==", userId)
+      );
+      const querySnap = await getDocs(q);
+      const list = querySnap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      list.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      setNotifications(list);
+    } catch (err) {
+      console.error("Erro ao carregar notificações:", err);
+    } finally {
+      setLoadingNotifications(false);
     }
   };
 
@@ -169,6 +194,7 @@ export default function ProfilePage() {
           }
           // Buscar recomendações de nutrição baseadas no ciclo do usuário
           fetchNutritionRecommendations(currentUser);
+          loadNotifications(currentUser.uid);
         } catch (error) {
           console.error("Erro ao carregar perfil:", error);
         } finally {
@@ -684,7 +710,37 @@ export default function ProfilePage() {
             )}
           </div>
 
+          {/* Central de Notificações */}
+          <div className="bg-white/70 border border-sand-200/50 rounded-[2rem] p-6 shadow-sm space-y-4">
+            <div className="flex items-center gap-2 border-b border-sand-100 pb-3">
+              <ShieldAlert className="w-4 h-4 text-quartz-400" />
+              <h4 className="font-serif text-base italic text-spa-dark">Notificações</h4>
+            </div>
 
+            {loadingNotifications ? (
+              <div className="flex items-center justify-center py-4">
+                <span className="w-4 h-4 border-2 border-quartz-400 border-t-transparent animate-spin rounded-full" />
+              </div>
+            ) : notifications.length === 0 ? (
+              <p className="text-[11px] text-spa-light font-light text-center py-2">
+                Nenhuma notificação no momento.
+              </p>
+            ) : (
+              <div className="space-y-3 max-h-[250px] overflow-y-auto pr-1">
+                {notifications.map((notif) => (
+                  <div key={notif.id} className="p-3 bg-ivory rounded-xl border border-sand-100 space-y-1">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[9px] font-bold text-quartz-600 uppercase tracking-wider">{notif.title}</span>
+                      <span className="text-[8px] text-spa-light">{new Date(notif.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <p className="text-[10px] text-spa-medium font-light leading-relaxed">
+                      {notif.message}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
         </div>
 
