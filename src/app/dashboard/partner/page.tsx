@@ -220,7 +220,7 @@ export default function PartnerDashboard() {
             className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-quartz-500 hover:text-quartz-600 transition-colors cursor-pointer"
           >
             <LogOut className="w-3.5 h-3.5" />
-            <span>{t("profile.logout") || "Sair"}</span>
+            <span>{t("perfil.logout") || "Sair"}</span>
           </button>
         </div>
       </header>

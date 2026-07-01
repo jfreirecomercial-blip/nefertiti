@@ -377,7 +377,7 @@ export default function SocialPage() {
       <header className="sticky top-0 z-50 bg-ivory/85 backdrop-blur-md border-b border-sand-100/60 px-6 lg:px-20 py-5 flex items-center justify-between">
         <Link href="/profile" className="flex items-center gap-2 text-spa-dark hover:text-quartz-500 transition-colors">
           <ArrowLeft className="w-4 h-4" />
-          <span className="text-xs font-bold uppercase tracking-[0.2em]">Painel</span>
+          <span className="text-xs font-bold uppercase tracking-[0.2em]">{t("nav.dashboard") || "Painel"}</span>
         </Link>
         <div className="flex items-center gap-4">
           <LanguageSelector />

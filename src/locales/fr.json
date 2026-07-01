@@ -4,7 +4,11 @@
     "ritmo": "Le Rythme",
     "manifesto": "Manifeste",
     "entrar": "Se Connecter",
-    "fazerParte": "Rejoindre le Sanctuaire"
+    "fazerParte": "Rejoindre le Sanctuaire",
+    "calendario": "Calendrier",
+    "social": "Social",
+    "myProfile": "Mon Profil",
+    "dashboard": "Tableau de Bord"
   },
   "hero": {
     "badge": "Soin de soi Reconfiguré",
@@ -112,7 +116,7 @@
   },
   "perfil": {
     "title": "Votre Sanctuaire Personnel",
-    "subtitle": "Gérez vos données et paramètres de confidentialité avec un chiffrement de bout en bout.",
+    "subtitle": "Gerez vos données et paramètres de confidentialité avec un chiffrement de bout en bout.",
     "personalData": "Données Personnelles",
     "name": "Nom",
     "email": "E-mail",
@@ -126,7 +130,15 @@
     "anonymousAnalytics": "Envoyer des données de télémétrie anonymes",
     "anonymousAnalyticsDesc": "Aide à améliorer l'algorithme de détection de cycle sans exposer votre identité.",
     "mfa": "Authentification à Double Facteur",
-    "mfaDesc": "Protection supplémentaire pour votre dossier médical électronique."
+    "mfaDesc": "Protection supplémentaire pour votre dossier médical électronique.",
+    "photoSuccess": "Photo de profil mise à jour avec succès !",
+    "exporting": "Collecte de vos données de santé...",
+    "exportSuccess": "Données exportées avec succès !",
+    "deleteConfirm": "AVERTISSEMENT : Cela supprimera définitivement votre compte et TOUTES vos données de santé de manière irréversible. Voulez-vous continuer ?",
+    "deleting": "Suppression de tous les dossiers de santé...",
+    "deleteError": "Pour supprimer votre compte, vous devez vous être connecté récemment. Veuillez vous déconnecter et vous reconnecter avant de réessayer.",
+    "downloadData": "Télécharger Mes Données (JSON)",
+    "deleteAccount": "Supprimer Mon Compte"
   },
   "social": {
     "title": "Cercle de Guérison",

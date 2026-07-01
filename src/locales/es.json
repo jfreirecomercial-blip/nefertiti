@@ -4,7 +4,11 @@
     "ritmo": "El Ritmo",
     "manifesto": "Manifiesto",
     "entrar": "Acceder",
-    "fazerParte": "Unirse al Santuario"
+    "fazerParte": "Unirse al Santuario",
+    "calendario": "Calendario",
+    "social": "Social",
+    "myProfile": "Mi Perfil",
+    "dashboard": "Tablero"
   },
   "hero": {
     "badge": "Autocuidado Reconfigurado",
@@ -113,7 +117,7 @@
   "perfil": {
     "title": "Tu Santuario Personal",
     "subtitle": "Gestiona tus datos y configuraciones de privacidad con encriptación de extremo a extremo.",
-    "personalData": "Datos Personales",
+    "personalData": "Datos Pessoais",
     "name": "Nombre",
     "email": "Correo",
     "saveChanges": "Guardar Cambios",
@@ -126,7 +130,15 @@
     "anonymousAnalytics": "Enviar telemetría analítica anónima",
     "anonymousAnalyticsDesc": "Ayuda a mejorar el algoritmo de detección de ciclos sin exponer tu identidad.",
     "mfa": "Autenticación de Dos Factores",
-    "mfaDesc": "Protección adicional para tu expediente médico electrónico."
+    "mfaDesc": "Protección adicional para tu expediente médico electrónico.",
+    "photoSuccess": "¡Foto de perfil actualizada con éxito!",
+    "exporting": "Recopilando sus datos de salud...",
+    "exportSuccess": "¡Datos exportados con éxito!",
+    "deleteConfirm": "ADVERTENCIA: Esto eliminará permanentemente su cuenta y TODOS sus datos de salud de forma irreversible. ¿Desea continuar?",
+    "deleting": "Eliminando todos los registros de salud...",
+    "deleteError": "Para eliminar su cuenta, debe haber iniciado sesión recientemente. Cierre la sesión e inicie sesión de nuevo antes de volver a intentarlo.",
+    "downloadData": "Descargar Mis Datos (JSON)",
+    "deleteAccount": "Eliminar Mi Cuenta"
   },
   "social": {
     "title": "Círculo de Sanación",

@@ -4,7 +4,11 @@
     "ritmo": "The Rhythm",
     "manifesto": "Manifesto",
     "entrar": "Sign In",
-    "fazerParte": "Join Sanctuary"
+    "fazerParte": "Join Sanctuary",
+    "calendario": "Calendar",
+    "social": "Social",
+    "myProfile": "My Profile",
+    "dashboard": "Dashboard"
   },
   "hero": {
     "badge": "Self-care Reconfigured",
@@ -126,7 +130,15 @@
     "anonymousAnalytics": "Send anonymous analytical telemetry",
     "anonymousAnalyticsDesc": "Helps improve the cycle detection algorithm without exposing your identity.",
     "mfa": "Two-Factor Authentication",
-    "mfaDesc": "Additional protection for your electronic medical record."
+    "mfaDesc": "Additional protection for your electronic medical record.",
+    "photoSuccess": "Profile picture updated successfully!",
+    "exporting": "Collecting your health data...",
+    "exportSuccess": "Data exported successfully!",
+    "deleteConfirm": "WARNING: This will permanently delete your account and ALL your health data irreversibly. Do you want to proceed?",
+    "deleting": "Deleting all health records...",
+    "deleteError": "To delete your account, you need to have signed in recently. Please log out and sign in again before retrying.",
+    "downloadData": "Download My Data (JSON)",
+    "deleteAccount": "Delete My Account"
   },
   "social": {
     "title": "Healing Circle",

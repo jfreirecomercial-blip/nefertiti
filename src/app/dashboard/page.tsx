@@ -232,7 +232,7 @@ export default function DashboardPage() {
       <header className="px-6 lg:px-20 py-6 flex items-center justify-between border-b border-sand-100/40 bg-white/30 backdrop-blur-md sticky top-0 z-50">
         <Link href="/profile" className="flex items-center gap-2 text-spa-dark hover:text-quartz-500 transition-colors">
           <ArrowLeft className="w-4 h-4" />
-          <span className="text-xs font-bold uppercase tracking-[0.2em]">Meu Perfil</span>
+          <span className="text-xs font-bold uppercase tracking-[0.2em]">{t("nav.myProfile") || "Meu Perfil"}</span>
         </Link>
         <div className="flex items-center gap-4">
           <LanguageSelector />

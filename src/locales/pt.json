@@ -4,7 +4,11 @@
     "ritmo": "O Ritmo",
     "manifesto": "Manifesto",
     "entrar": "Entrar",
-    "fazerParte": "Fazer Parte"
+    "fazerParte": "Fazer Parte",
+    "calendario": "Calendário",
+    "social": "Social",
+    "myProfile": "Meu Perfil",
+    "dashboard": "Painel"
   },
   "hero": {
     "badge": "Autocuidado Reconfigurado",
@@ -126,7 +130,15 @@
     "anonymousAnalytics": "Enviar telemetria analítica anônima",
     "anonymousAnalyticsDesc": "Ajuda a melhorar o algoritmo de detecção de ciclo sem expor sua identidade.",
     "mfa": "Autenticação em Duas Etapas",
-    "mfaDesc": "Proteção adicional para seu prontuário médico eletrônico."
+    "mfaDesc": "Proteção adicional para seu prontuário médico eletrônico.",
+    "photoSuccess": "Foto de perfil atualizada com sucesso!",
+    "exporting": "Coletando seus dados de saúde...",
+    "exportSuccess": "Dados exportados com sucesso!",
+    "deleteConfirm": "ATENÇÃO: Isso excluirá permanentemente sua conta e TODOS os seus dados de saúde de forma irreversível. Deseja prosseguir?",
+    "deleting": "Excluindo todos os registros de saúde...",
+    "deleteError": "Para excluir sua conta, você precisa ter feito login recentemente. Por favor, saia e entre novamente antes de tentar de novo.",
+    "downloadData": "Baixar Meus Dados (JSON)",
+    "deleteAccount": "Excluir Minha Conta"
   },
   "social": {
     "title": "Círculo de Cura",

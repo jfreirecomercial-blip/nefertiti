@@ -236,7 +236,7 @@ export default function ProfilePage() {
       await updateDoc(userRef, { photoURL: downloadURL, updatedAt: new Date().toISOString() });
       
       setPhotoURL(downloadURL);
-      setImportStatus(t("profile.photoSuccess") || "Foto de perfil atualizada com sucesso!");
+      setImportStatus(t("perfil.photoSuccess") || "Foto de perfil atualizada com sucesso!");
     } catch (err: any) {
       console.error(err);
       setImportStatus("Erro ao enviar foto: " + err.message);
@@ -288,7 +288,7 @@ export default function ProfilePage() {
     if (!user) return;
 
     try {
-      setImportStatus(t("profile.exporting") || "Coletando seus dados de saúde...");
+      setImportStatus(t("perfil.exporting") || "Coletando seus dados de saúde...");
       
       // Obter dados do perfil
       const userSnap = await getDoc(doc(db, "users", user.uid));
@@ -328,7 +328,7 @@ export default function ProfilePage() {
       link.click();
       document.body.removeChild(link);
       
-      setImportStatus(t("profile.exportSuccess") || "Dados exportados com sucesso!");
+      setImportStatus(t("perfil.exportSuccess") || "Dados exportados com sucesso!");
     } catch (err: any) {
       console.error("Erro ao exportar dados:", err);
       setImportStatus("Erro ao exportar: " + err.message);
@@ -340,14 +340,14 @@ export default function ProfilePage() {
     if (!user) return;
 
     const confirmDelete = window.confirm(
-      t("profile.deleteConfirm") || "ATENÇÃO: Isso excluirá permanentemente sua conta e TODOS os seus dados de saúde de forma irreversível. Deseja prosseguir?"
+      t("perfil.deleteConfirm") || "ATENÇÃO: Isso excluirá permanentemente sua conta e TODOS os seus dados de saúde de forma irreversível. Deseja prosseguir?"
     );
 
     if (!confirmDelete) return;
 
     try {
       setSaving(true);
-      setImportStatus(t("profile.deleting") || "Excluindo todos os registros de saúde...");
+      setImportStatus(t("perfil.deleting") || "Excluindo todos os registros de saúde...");
 
       // 1. Excluir Logs Diários
       const logsRef = collection(db, "daily_logs");
@@ -369,7 +369,7 @@ export default function ProfilePage() {
       router.push("/");
     } catch (err: any) {
       console.error("Erro ao deletar conta:", err);
-      alert(t("profile.deleteError") || "Para excluir sua conta, você precisa ter feito login recentemente. Por favor, saia e entre novamente antes de tentar de novo.");
+      alert(t("perfil.deleteError") || "Para excluir sua conta, você precisa ter feito login recentemente. Por favor, saia e entre novamente antes de tentar de novo.");
     } finally {
       setSaving(false);
     }
@@ -566,7 +566,7 @@ export default function ProfilePage() {
 
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="text-xs font-bold uppercase tracking-[0.15em] text-quartz-500 hover:text-quartz-600 transition-colors">
-            Calendário
+            {t("nav.calendario") || "Calendário"}
           </Link>
           <Link href="/social" className="text-xs font-bold uppercase tracking-[0.15em] text-spa-medium hover:text-quartz-500 transition-colors">
             {t("nav.social") || "Social"}
@@ -577,7 +577,7 @@ export default function ProfilePage() {
             className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-quartz-500 hover:text-quartz-600 transition-colors cursor-pointer"
           >
             <LogOut className="w-3.5 h-3.5" />
-            <span className="hidden md:inline">{t("profile.logout") || "Sair"}</span>
+            <span className="hidden md:inline">{t("perfil.logout") || "Sair"}</span>
           </button>
         </div>
       </header>
@@ -950,7 +950,7 @@ export default function ProfilePage() {
                       className="flex-1 flex items-center justify-center gap-2.5 py-3 border border-sand-200 hover:border-quartz-200 bg-white hover:bg-quartz-50/20 text-spa-medium hover:text-quartz-500 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer"
                     >
                       <Download className="w-3.5 h-3.5" />
-                      {t("profile.downloadData") || "Baixar Meus Dados (JSON)"}
+                      {t("perfil.downloadData") || "Baixar Meus Dados (JSON)"}
                     </button>
 
                     {/* GDPR Forgetfulness: Delete Account */}
@@ -959,7 +959,7 @@ export default function ProfilePage() {
                       className="flex-1 flex items-center justify-center gap-2.5 py-3 border border-quartz-100 hover:bg-quartz-100/30 text-quartz-500 hover:text-quartz-700 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
-                      {t("profile.deleteAccount") || "Excluir Minha Conta"}
+                      {t("perfil.deleteAccount") || "Excluir Minha Conta"}
                     </button>
                   </div>
                 </div>
