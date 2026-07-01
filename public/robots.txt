@@ -1,0 +1,44 @@
+# Allow standard search engines
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /daily-tracker/
+Disallow: /social/
+
+# Allow AI Crawler Bots (to index public marketing content and public FAQs)
+User-agent: GPTBot
+Allow: /
+Allow: /faq
+Disallow: /api/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /daily-tracker/
+Disallow: /social/
+
+User-agent: ChatGPT-User
+Allow: /
+Allow: /faq
+
+User-agent: ClaudeBot
+Allow: /
+Allow: /faq
+Disallow: /api/
+Disallow: /admin/
+
+User-agent: Google-Extended
+Allow: /
+Allow: /faq
+Disallow: /api/
+Disallow: /admin/
+
+User-agent: PerplexityBot
+Allow: /
+Allow: /faq
+Disallow: /api/
+Disallow: /admin/
+
+Sitemap: https://nefertiti-santuario.web.app/sitemap.xml

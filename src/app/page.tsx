@@ -6,6 +6,7 @@ import CardFase from "@/components/ui/CardFase";
 import { ArrowRight, Star, ShieldAlert, ChevronDown, HelpCircle } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import LanguageSelector from "@/components/ui/LanguageSelector";
+import Footer from "@/components/ui/Footer";
 
 export default function LandingPage() {
   const { t } = useLanguage();
@@ -404,21 +405,7 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-sand-100/50 px-6 lg:px-20 py-10 text-center text-xs text-spa-light">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-3">
-            <span className="font-serif text-xl font-light tracking-widest text-spa-dark">nefertiti</span>
-            <span className="text-[10px] text-spa-light font-light">
-              | {t("footer.copyright", { year: new Date().getFullYear() })}
-            </span>
-          </div>
-          <div className="flex gap-8 text-[10px] font-bold uppercase tracking-wider">
-            <Link href="#" className="hover:text-spa-dark transition-colors">{t("footer.terms")}</Link>
-            <Link href="#" className="hover:text-spa-dark transition-colors">{t("footer.privacy")}</Link>
-            <Link href="#" className="hover:text-spa-dark transition-colors">{t("footer.support")}</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   );

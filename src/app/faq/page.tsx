@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, HelpCircle, ChevronDown, Check, Shield } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import LanguageSelector from "@/components/ui/LanguageSelector";
+import Footer from "@/components/ui/Footer";
 
 export default function FaqPage() {
   const { t } = useLanguage();
@@ -140,9 +141,7 @@ export default function FaqPage() {
       </main>
 
       {/* Footer */}
-      <footer className="py-8 text-center text-[10px] text-spa-light tracking-wide border-t border-sand-100/30">
-        <p className="font-light">Nefertiti Sanctuary &copy; {new Date().getFullYear()}</p>
-      </footer>
+      <Footer />
 
     </div>
   );

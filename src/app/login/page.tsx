@@ -16,6 +16,7 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
 import { ArrowLeft, Shield, Check, Mail, Lock, User as UserIcon } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import LanguageSelector from "@/components/ui/LanguageSelector";
+import Footer from "@/components/ui/Footer";
 
 function LoginForm() {
   const { t } = useLanguage();
@@ -358,13 +359,7 @@ function LoginForm() {
       </main>
 
       {/* Footer */}
-      <footer className="py-6 text-center text-[10px] text-spa-light tracking-wide border-t border-sand-100/30">
-        <div className="flex justify-center gap-6 mb-2">
-          <Shield className="w-3.5 h-3.5 text-quartz-300" />
-          <span>{t("login.securityGuard") || "Sua privacidade é resguardada de ponta a ponta."}</span>
-        </div>
-        <p className="font-light">Nefertiti Sanctuary &copy; {new Date().getFullYear()}</p>
-      </footer>
+      <Footer />
     </div>
   );
 }

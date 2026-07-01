@@ -73,10 +73,10 @@ export default function CookieConsent() {
           </div>
           <div>
             <h4 className="font-serif text-lg font-light tracking-wide text-spa-dark italic">
-              {t("cookies.title")}
+              {t("cookies.title") || "Sua Privacidade no Santuário"}
             </h4>
             <p className="text-xs text-spa-light font-light leading-relaxed mt-1">
-              {t("cookies.description")}
+              {t("cookies.description") || "Utilizamos cookies para refinar sua experiência."} Ao continuar, você aceita nossa <strong>Política de Privacidade</strong> em conformidade com a <strong>LGPD (Brasil)</strong>, <strong>GDPR (Europa)</strong> e diretivas internacionais de proteção a dados de saúde.
             </p>
           </div>
         </div>

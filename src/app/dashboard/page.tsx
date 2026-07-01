@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import LanguageSelector from "@/components/ui/LanguageSelector";
+import Footer from "@/components/ui/Footer";
 
 export default function DashboardPage() {
   const { t } = useLanguage();
@@ -372,9 +373,7 @@ export default function DashboardPage() {
       </main>
 
       {/* Footer */}
-      <footer className="py-6 text-center text-[10px] text-spa-light tracking-wide border-t border-sand-100/30">
-        <p className="font-light">Nefertiti Sanctuary &copy; {new Date().getFullYear()}</p>
-      </footer>
+      <Footer />
     </div>
   );
 }

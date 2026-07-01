@@ -41,6 +41,7 @@ import {
 import { useLanguage } from "@/context/LanguageContext";
 import LanguageSelector from "@/components/ui/LanguageSelector";
 import { compressImage } from "@/lib/image-compression";
+import Footer from "@/components/ui/Footer";
 
 export default function ProfilePage() {
   const { t } = useLanguage();
@@ -76,6 +77,7 @@ export default function ProfilePage() {
   const [importType, setImportType] = useState<"none" | "ai" | "csv">("none");
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [importStatus, setImportStatus] = useState("");
+  const [showPrivacyZone, setShowPrivacyZone] = useState(false);
 
   // Recomendações nutricionais (Spoonacular)
   const [recipes, setRecipes] = useState<any[]>([]);
@@ -682,36 +684,7 @@ export default function ProfilePage() {
             )}
           </div>
 
-          {/* Privacy and GDPR Rights Card */}
-          <div className="bg-white/70 border border-sand-200/50 rounded-[2rem] p-6 shadow-sm">
-            <div className="flex items-center gap-2 mb-4">
-              <ShieldAlert className="w-4 h-4 text-quartz-400" />
-              <h4 className="font-serif text-base italic text-spa-dark">Seus Direitos de Privacidade</h4>
-            </div>
-            <p className="text-[11px] text-spa-light font-light leading-relaxed mb-6">
-              Em total conformidade com as diretivas europeias (GDPR) e brasileiras (LGPD), você possui controle absoluto e soberano sobre os seus dados de saúde menstrual e pessoal.
-            </p>
 
-            <div className="space-y-3.5">
-              {/* GDPR Portability: JSON download */}
-              <button
-                onClick={handleDownloadData}
-                className="w-full flex items-center justify-center gap-2.5 py-3.5 border border-sand-200 hover:border-quartz-200 bg-white/60 hover:bg-quartz-50/20 text-spa-medium hover:text-quartz-500 rounded-2xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer"
-              >
-                <Download className="w-3.5 h-3.5" />
-                {t("profile.downloadData") || "Baixar Meus Dados (JSON)"}
-              </button>
-
-              {/* GDPR Forgetfulness: Delete Account */}
-              <button
-                onClick={handleDeleteAccount}
-                className="w-full flex items-center justify-center gap-2.5 py-3.5 border border-quartz-100 hover:bg-quartz-100/30 text-quartz-500 hover:text-quartz-700 rounded-2xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                {t("profile.deleteAccount") || "Excluir Minha Conta"}
-              </button>
-            </div>
-          </div>
 
         </div>
 
@@ -893,6 +866,49 @@ export default function ProfilePage() {
               </div>
 
             </form>
+
+            {/* Collapsible Privacy and GDPR rights */}
+            <div className="border-t border-sand-100/60 mt-8 pt-6">
+              <button
+                type="button"
+                onClick={() => setShowPrivacyZone(!showPrivacyZone)}
+                className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-spa-medium hover:text-spa-dark transition-colors cursor-pointer"
+              >
+                <ShieldAlert className="w-4 h-4 text-quartz-400" />
+                <span>Gerenciar Privacidade e Direitos de Dados</span>
+                <span className="text-[10px] text-spa-light font-normal normal-case ml-1">
+                  (GDPR, LGPD, CCPA)
+                </span>
+              </button>
+
+              {showPrivacyZone && (
+                <div className="mt-4 p-5 bg-ivory/40 border border-sand-200/50 rounded-2xl animate-fade-in space-y-4">
+                  <p className="text-xs text-spa-medium font-light leading-relaxed">
+                    Você possui controle total sobre os seus dados sob as diretivas europeias (GDPR) e brasileiras (LGPD). Seus registros são criptografados e confidenciais.
+                  </p>
+                  
+                  <div className="flex flex-col sm:flex-row gap-4 pt-1">
+                    {/* GDPR Portability: JSON download */}
+                    <button
+                      onClick={handleDownloadData}
+                      className="flex-1 flex items-center justify-center gap-2.5 py-3 border border-sand-200 hover:border-quartz-200 bg-white hover:bg-quartz-50/20 text-spa-medium hover:text-quartz-500 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      {t("profile.downloadData") || "Baixar Meus Dados (JSON)"}
+                    </button>
+
+                    {/* GDPR Forgetfulness: Delete Account */}
+                    <button
+                      onClick={handleDeleteAccount}
+                      className="flex-1 flex items-center justify-center gap-2.5 py-3 border border-quartz-100 hover:bg-quartz-100/30 text-quartz-500 hover:text-quartz-700 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      {t("profile.deleteAccount") || "Excluir Minha Conta"}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Card de Recomendações Nutricionais (Spoonacular) */}
@@ -1201,7 +1217,7 @@ export default function ProfilePage() {
         </div>
 
       </main>
-      
+      <Footer />
     </div>
   );
 }
