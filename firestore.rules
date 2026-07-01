@@ -38,7 +38,12 @@ service cloud.firestore {
     // 1. Coleção 'users': O dono pode ler e escrever. O parceiro cúmplice pode apenas ler para ver o ciclo.
     match /users/{userId} {
       allow read: if isOwner(userId) || isPartnerOf(userId);
-      allow write: if isOwner(userId);
+      allow create: if isOwner(userId) 
+        && (!('role' in request.resource.data) || request.resource.data.role == 'member')
+        && (!('partnerId' in request.resource.data));
+      allow update: if isOwner(userId)
+        && (!('role' in request.resource.data) || request.resource.data.role == resource.data.role)
+        && (!('partnerId' in request.resource.data) || request.resource.data.partnerId == resource.data.partnerId);
     }
 
     // 2. Coleção 'daily_logs': O dono pode ler/escrever. O parceiro cúmplice pode apenas ler os logs de sintomas.

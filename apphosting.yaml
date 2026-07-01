@@ -58,6 +58,6 @@ env:
 
   # Spoonacular API Key (server-side only, kept private)
   - variable: SPOONACULAR_API_KEY
-    value: 736793720aa74c4c8e6a536f3d29b354
+    secret: spoonacular_api_key
     availability:
       - RUNTIME

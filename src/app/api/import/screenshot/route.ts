@@ -1,7 +1,27 @@
 import { NextResponse } from "next/server";
+import { adminAuth } from "@/lib/firebase-admin";
 
 export async function POST(request: Request) {
   try {
+    // Verificar autenticação Firebase JWT
+    const authHeader = request.headers.get("Authorization");
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return NextResponse.json(
+        { error: "Autenticação requerida. Token não fornecido." },
+        { status: 401 }
+      );
+    }
+
+    const token = authHeader.split("Bearer ")[1];
+    try {
+      await adminAuth.verifyIdToken(token);
+    } catch (error) {
+      return NextResponse.json(
+        { error: "Token inválido ou expirado." },
+        { status: 401 }
+      );
+    }
+
     const { image } = await request.json();
 
     if (!image) {

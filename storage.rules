@@ -12,8 +12,7 @@ service firebase.storage {
       allow read: if isAuthenticated();
       allow write: if isAuthenticated() 
         && request.auth.uid == userId
-        && request.resource.contentType.matches('image/.*')
-        && request.resource.size <= 1024 * 1024;
+        && (request.resource == null || (request.resource.contentType.matches('image/.*') && request.resource.size <= 1024 * 1024));
     }
 
     // Regras de fotos de posts: users/{userId}/posts/{allPaths=**}
@@ -21,8 +20,7 @@ service firebase.storage {
       allow read: if isAuthenticated();
       allow write: if isAuthenticated() 
         && request.auth.uid == userId
-        && request.resource.contentType.matches('image/.*')
-        && request.resource.size <= 1024 * 1024;
+        && (request.resource == null || (request.resource.contentType.matches('image/.*') && request.resource.size <= 1024 * 1024));
     }
 
     // Regras auxiliares para admin
