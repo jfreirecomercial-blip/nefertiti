@@ -114,6 +114,7 @@ export async function GET(request: Request) {
     url.searchParams.append("apiKey", apiKey);
     url.searchParams.append("number", "3");
     url.searchParams.append("addRecipeInformation", "true");
+    url.searchParams.append("addRecipeNutrition", "true");
     url.searchParams.append("fillIngredients", "true");
     if (queryFoods) url.searchParams.append("query", queryFoods);
     if (minIron > 0) url.searchParams.append("minIron", String(minIron));

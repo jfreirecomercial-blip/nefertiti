@@ -532,6 +532,9 @@ export default function ProfilePage() {
         </div>
 
         <div className="flex items-center gap-6">
+          <Link href="/dashboard" className="text-xs font-bold uppercase tracking-[0.15em] text-quartz-500 hover:text-quartz-600 transition-colors">
+            Calendário
+          </Link>
           <Link href="/social" className="text-xs font-bold uppercase tracking-[0.15em] text-spa-medium hover:text-quartz-500 transition-colors">
             {t("nav.social") || "Social"}
           </Link>
@@ -600,6 +603,28 @@ export default function ProfilePage() {
               <Sparkles className="w-4 h-4 text-quartz-400" />
               <h4 className="font-serif text-base italic text-spa-dark">Método e Consultas</h4>
             </div>
+
+            <Link
+              href="/dashboard"
+              className="w-full flex items-center justify-between p-3.5 bg-quartz-50/40 hover:bg-quartz-100/50 border border-quartz-200/60 hover:border-quartz-300 rounded-2xl text-[10px] font-bold uppercase tracking-widest text-quartz-600 transition-all group"
+            >
+              <div className="flex items-center gap-2">
+                <Calendar className="w-3.5 h-3.5 text-quartz-400" />
+                <span>Dashboard do Ciclo</span>
+              </div>
+              <ArrowRight className="w-3 h-3 text-quartz-500 group-hover:translate-x-1 transition-transform" />
+            </Link>
+
+            <Link
+              href="/daily-tracker"
+              className="w-full flex items-center justify-between p-3.5 bg-quartz-50/40 hover:bg-quartz-100/50 border border-quartz-200/60 hover:border-quartz-300 rounded-2xl text-[10px] font-bold uppercase tracking-widest text-quartz-600 transition-all group"
+            >
+              <div className="flex items-center gap-2">
+                <Activity className="w-3.5 h-3.5 text-quartz-400" />
+                <span>Registo de Sintomas Diário</span>
+              </div>
+              <ArrowRight className="w-3 h-3 text-quartz-500 group-hover:translate-x-1 transition-transform" />
+            </Link>
 
             <Link
               href="/professionals"
