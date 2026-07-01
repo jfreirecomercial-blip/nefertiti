@@ -20,41 +20,56 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
 
-    // 1. Coleção 'users': Apenas o dono do UID correspondente pode ler e escrever.
-    match /users/{userId} {
-      allow read, write: if isOwner(userId);
+    // Função auxiliar para verificar se o usuário atual é um parceiro (Cúmplice)
+    function isPartner() {
+      return isAuthenticated() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        ('role' in get(/databases/$(database)/documents/users/$(request.auth.uid)).data) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'partner';
     }
 
-    // 2. Coleção 'daily_logs': Apenas o dono (userId correspondente no documento) pode ler, criar, atualizar ou deletar.
+    // Função auxiliar para verificar se o usuário é o parceiro cúmplice vinculado da usuária
+    function isPartnerOf(ownerId) {
+      return isPartner() &&
+        ('partnerId' in get(/databases/$(database)/documents/users/$(request.auth.uid)).data) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.partnerId == ownerId;
+    }
+
+    // 1. Coleção 'users': O dono pode ler e escrever. O parceiro cúmplice pode apenas ler para ver o ciclo.
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isPartnerOf(userId);
+      allow write: if isOwner(userId);
+    }
+
+    // 2. Coleção 'daily_logs': O dono pode ler/escrever. O parceiro cúmplice pode apenas ler os logs de sintomas.
     match /daily_logs/{logId} {
-      allow read, delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isPartnerOf(resource.data.userId));
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
       allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
       allow update: if isAuthenticated() 
         && resource.data.userId == request.auth.uid 
         && request.resource.data.userId == request.auth.uid;
     }
 
-    // 3. Coleção 'social_posts': Qualquer usuário logado pode ler posts marcados como públicos (ou compartilhados), 
-    // ou se ele próprio for o autor. Mas apenas o autor (userId correspondente) ou admin pode atualizar ou deletar.
-    // As fotos associadas devem estar limitadas a 10.
+    // 3. Coleção 'social_posts': Parceiros cúmplices não têm acesso a nenhuma parte social (postagens, comentários, curtidas).
     match /social_posts/{postId} {
-      allow read: if isAuthenticated() && (
+      allow read: if isAuthenticated() && !isPartner() && (
         resource.data.isPublic == true || 
         resource.data.shared == true || 
         resource.data.userId == request.auth.uid ||
         isAdmin()
       );
       
-      allow create: if isAuthenticated() 
+      allow create: if isAuthenticated() && !isPartner()
         && request.resource.data.userId == request.auth.uid
         && (!('photos' in request.resource.data) || (request.resource.data.photos is list && request.resource.data.photos.size() <= 10));
         
-      allow update: if isAuthenticated() 
+      allow update: if isAuthenticated() && !isPartner()
         && (resource.data.userId == request.auth.uid || isAdmin())
         && (request.resource.data.userId == resource.data.userId)
         && (!('photos' in request.resource.data) || (request.resource.data.photos is list && request.resource.data.photos.size() <= 10));
         
-      allow delete: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow delete: if isAuthenticated() && !isPartner() && (resource.data.userId == request.auth.uid || isAdmin());
     }
 
     // 4. Coleção 'appointments': Usuários normais podem ler e escrever seus próprios agendamentos.

@@ -35,7 +35,8 @@ import {
   FileSpreadsheet,
   HelpCircle,
   Award,
-  ArrowRight
+  ArrowRight,
+  Heart
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import LanguageSelector from "@/components/ui/LanguageSelector";
@@ -129,6 +130,10 @@ export default function ProfilePage() {
           
           if (snap.exists()) {
             profileData = snap.data();
+            if (profileData.role === "partner") {
+              router.push("/dashboard/partner");
+              return;
+            }
           }
 
           if (profileData) {
@@ -622,6 +627,17 @@ export default function ProfilePage() {
               <div className="flex items-center gap-2">
                 <Activity className="w-3.5 h-3.5 text-quartz-400" />
                 <span>Registo de Sintomas Diário</span>
+              </div>
+              <ArrowRight className="w-3 h-3 text-quartz-500 group-hover:translate-x-1 transition-transform" />
+            </Link>
+
+            <Link
+              href="/profile/partner"
+              className="w-full flex items-center justify-between p-3.5 bg-quartz-50/40 hover:bg-quartz-100/50 border border-quartz-200/60 hover:border-quartz-300 rounded-2xl text-[10px] font-bold uppercase tracking-widest text-quartz-600 transition-all group"
+            >
+              <div className="flex items-center gap-2">
+                <Heart className="w-3.5 h-3.5 text-quartz-400 fill-quartz-200/40" />
+                <span>Cúmplices (Parceiro)</span>
               </div>
               <ArrowRight className="w-3 h-3 text-quartz-500 group-hover:translate-x-1 transition-transform" />
             </Link>

@@ -177,5 +177,28 @@
     "analyticsDesc": "Ajudam-nos a entender como a plataforma é utilizada de forma inteiramente anônima.",
     "marketingTitle": "Marketing Integrativo",
     "marketingDesc": "Permitem personalizar ofertas e conteúdos de bem-estar de acordo com seus interesses."
+  },
+  "cumplices": {
+    "title": "Cúmplices",
+    "subtitle": "Compartilhe seu ciclo com quem caminha ao seu lado para construir empatia e cumplicidade.",
+    "inviteBtn": "Conectar Parceiro",
+    "revoking": "Cancelando conexão...",
+    "revokeSuccess": "Conexão cancelada com sucesso.",
+    "codeValid": "Código de pareamento gerado. Expira em 24 horas:",
+    "partnerConnected": "Seu parceiro está conectado!",
+    "revokeBtn": "Desconectar Parceiro",
+    "explain": "Ao conectar, seu parceiro terá um painel exclusivo focado apenas na sua fisiologia e fases do ciclo. Ele não terá nenhum acesso à sua área social, posts, comentários ou anotações confidenciais.",
+    "partnerDashboard": "Painel de Cúmplice",
+    "partnerHeader": "Conexão Cúmplice",
+    "cyclePhase": "Fase Atual",
+    "daysToNext": "dias para a próxima fase",
+    "empathyTip": "Dica de Cuidado Cúmplice",
+    "partnerWarning": "Acesso Restrito: Suas permissões limitam-se ao acompanhamento fisiológico essencial para empatia de ciclo.",
+    "enterCodeTitle": "Vincular a uma Parceira",
+    "enterCodeDesc": "Insira o código de 6 dígitos gerado no aplicativo dela para sincronizar o calendário de ciclo.",
+    "codePlaceholder": "Código (ex: 123456)",
+    "btnSubmitCode": "Sincronizar Ciclos",
+    "invalidCode": "Código inválido ou expirado.",
+    "successLink": "Sincronização realizada com sucesso! Redirecionando..."
   }
 }

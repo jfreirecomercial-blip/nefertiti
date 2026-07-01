@@ -57,6 +57,10 @@ export default function DashboardPage() {
       const snap = await getDoc(userRef);
       if (snap.exists()) {
         const profile = snap.data();
+        if (profile.role === "partner") {
+          router.push("/dashboard/partner");
+          return;
+        }
         setUserProfile(profile);
         
         // Carregar logs diários do utilizador

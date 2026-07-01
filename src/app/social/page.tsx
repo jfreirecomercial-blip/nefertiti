@@ -75,12 +75,16 @@ export default function SocialPage() {
         router.push("/login");
       } else {
         setUser(currentUser);
-        // Buscar se o usuário é administrador
+        // Buscar se o usuário é administrador ou parceiro
         try {
           const userDocRef = doc(db, "users", currentUser.uid);
           const userDocSnap = await getDoc(userDocRef);
           if (userDocSnap.exists()) {
             const userData = userDocSnap.data();
+            if (userData.role === "partner") {
+              router.push("/dashboard/partner");
+              return;
+            }
             setIsAdmin(userData.role === "admin");
           }
         } catch (err) {

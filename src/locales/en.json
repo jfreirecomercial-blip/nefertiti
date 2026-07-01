@@ -177,5 +177,28 @@
     "analyticsDesc": "Helps us understand how the platform is used in a completely anonymous way.",
     "marketingTitle": "Integrative Marketing",
     "marketingDesc": "Allows us to personalize wellness suggestions and offers according to your interests."
+  },
+  "cumplices": {
+    "title": "Cúmplices",
+    "subtitle": "Share your cycle with the one walking beside you to build empathy and complicity.",
+    "inviteBtn": "Connect Partner",
+    "revoking": "Canceling connection...",
+    "revokeSuccess": "Connection successfully canceled.",
+    "codeValid": "Pairing code generated. Expires in 24 hours:",
+    "partnerConnected": "Your partner is connected!",
+    "revokeBtn": "Disconnect Partner",
+    "explain": "When connected, your partner will have an exclusive dashboard focused only on your physiology and cycle phases. He will not have any access to your social area, posts, comments, or private logs.",
+    "partnerDashboard": "Cúmplice Dashboard",
+    "partnerHeader": "Cúmplice Connection",
+    "cyclePhase": "Current Phase",
+    "daysToNext": "days to next phase",
+    "empathyTip": "Cúmplice Care Tip",
+    "partnerWarning": "Restricted Access: Your permissions are limited to essential physiological tracking for cycle empathy.",
+    "enterCodeTitle": "Link with a Partner",
+    "enterCodeDesc": "Enter the 6-digit code generated in her app to synchronize the cycle calendar.",
+    "codePlaceholder": "Code (e.g., 123456)",
+    "btnSubmitCode": "Synchronize Cycles",
+    "invalidCode": "Invalid or expired code.",
+    "successLink": "Synchronization successful! Redirecting..."
   }
 }
