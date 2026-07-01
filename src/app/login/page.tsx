@@ -311,7 +311,7 @@ function LoginForm() {
             )}
           </div>
 
-          {mode === "login" && (
+          {(mode === "login" || mode === "signup") && (
             <>
               {/* Divisor "ou" */}
               <div className="relative flex py-4 items-center">
@@ -348,7 +348,7 @@ function LoginForm() {
                       d="M12 23.2c3.24 0 5.97-1.07 7.96-2.91l-3.89-2.99c-1.08.72-2.47 1.16-4.07 1.16-3.08 0-5.68-2.33-6.61-5.34l-3.85 2.99c1.93 3.92 5.85 6.59 10.46 6.59z"
                     />
                   </svg>
-                  <span>{t("login.btnGoogle") || "Entrar com o Google"}</span>
+                  <span>{mode === "login" ? (t("login.btnGoogle") || "Entrar com o Google") : "Aderir com o Google"}</span>
                 </button>
               </div>
             </>
