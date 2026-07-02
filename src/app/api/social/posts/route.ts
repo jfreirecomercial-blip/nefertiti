@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { adminAuth, adminDb, adminStorage } from "@/lib/firebase-admin";
+import { randomUUID } from "crypto";
 
 export async function POST(request: Request) {
   try {
@@ -67,15 +68,18 @@ export async function POST(request: Request) {
         const fileId = `${Date.now()}_${i}`;
         const file = bucket.file(`users/${userId}/posts/${fileId}.jpg`);
         
+        const token = randomUUID();
         await file.save(buffer, {
-          metadata: { contentType: mimeType }
+          metadata: {
+            contentType: mimeType,
+            metadata: {
+              firebaseStorageDownloadTokens: token
+            }
+          }
         });
 
-        // Obter URL pública assinada com longa expiração para visualização segura
-        const [signedUrl] = await file.getSignedUrl({
-          action: "read",
-          expires: "01-01-2099"
-        });
+        // Construir URL pública do Firebase Storage com o token (evita requisições do IAM signBlob)
+        const signedUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(file.name)}?alt=media&token=${token}`;
         
         uploadedUrls.push(signedUrl);
       }
