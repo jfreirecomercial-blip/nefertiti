@@ -110,6 +110,11 @@ export default function RegisterProfessionalPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    if (file.size > 10 * 1024 * 1024) {
+      setError("A foto de perfil selecionada excede o limite máximo de 10MB.");
+      return;
+    }
+
     try {
       // Comprimir foto de perfil
       const compressed = await compressImage(file, {
@@ -119,6 +124,7 @@ export default function RegisterProfessionalPage() {
       });
       setPhotoFile(compressed);
       setPhotoPreview(URL.createObjectURL(compressed));
+      setError("");
     } catch (err) {
       console.error("Erro ao otimizar foto:", err);
       setError("Erro ao otimizar imagem de perfil. Tente outro arquivo.");
@@ -568,7 +574,17 @@ export default function RegisterProfessionalPage() {
                           type="file"
                           required={!existingProfile}
                           accept="image/*,application/pdf"
-                          onChange={(e) => setIdentityFile(e.target.files?.[0] || null)}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file && file.size > 5 * 1024 * 1024) {
+                              setError("O documento de identidade excede o limite máximo de 5MB.");
+                              e.target.value = "";
+                              setIdentityFile(null);
+                            } else {
+                              setIdentityFile(file || null);
+                              setError("");
+                            }
+                          }}
                           className="hidden"
                         />
                       </label>
@@ -592,7 +608,17 @@ export default function RegisterProfessionalPage() {
                           type="file"
                           required={!existingProfile}
                           accept="image/*,application/pdf"
-                          onChange={(e) => setCertificateFile(e.target.files?.[0] || null)}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file && file.size > 5 * 1024 * 1024) {
+                              setError("O certificado/diploma excede o limite máximo de 5MB.");
+                              e.target.value = "";
+                              setCertificateFile(null);
+                            } else {
+                              setCertificateFile(file || null);
+                              setError("");
+                            }
+                          }}
                           className="hidden"
                         />
                       </label>

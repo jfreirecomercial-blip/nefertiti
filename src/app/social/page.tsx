@@ -257,6 +257,13 @@ export default function SocialPage() {
 
     const filesArray = Array.from(files);
     
+    // Verificar se alguma foto excede o limite de 10MB
+    const hasLargeFile = filesArray.some(file => file.size > 10 * 1024 * 1024);
+    if (hasLargeFile) {
+      alert(t("social.photoSizeLimitError") || "Uma ou mais fotos selecionadas excedem o limite máximo de 10MB.");
+      return;
+    }
+
     // Verificar limite máximo de 10 fotos no total
     if (selectedPhotos.length + filesArray.length > 10) {
       alert(t("social.limitExceeded") || "Limite máximo de 10 fotos atingido por relato.");

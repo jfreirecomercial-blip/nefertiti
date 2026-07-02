@@ -23,6 +23,14 @@ service firebase.storage {
         && (request.resource == null || (request.resource.contentType.matches('image/.*') && request.resource.size <= 1024 * 1024));
     }
 
+    // Regras de fotos de galeria: users/{userId}/gallery/{allPaths=**}
+    match /users/{userId}/gallery/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() 
+        && request.auth.uid == userId
+        && (request.resource == null || (request.resource.contentType.matches('image/.*') && request.resource.size <= 1024 * 1024));
+    }
+
     // Regras auxiliares para admin
     function isAdmin() {
       return isAuthenticated() && 

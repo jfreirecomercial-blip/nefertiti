@@ -4,7 +4,8 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { auth, db } from "@/lib/firebase";
+import { auth, db, storage } from "@/lib/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
   collection,
   getDocs,
@@ -494,6 +495,11 @@ export default function SocialProfilePage({
     const file = e.target.files?.[0];
     if (!file || !currentUser) return;
 
+    if (file.size > 10 * 1024 * 1024) {
+      showError("A foto selecionada excede o limite máximo de 10MB.");
+      return;
+    }
+
     setUploadingPhoto(true);
     clearMessages();
     try {
@@ -503,16 +509,15 @@ export default function SocialProfilePage({
         maxSizeBytes: 250 * 1024,
       });
 
-      const base64 = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(compressed);
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = (err) => reject(err);
-      });
+      // Salvar a foto no Firebase Storage em vez de usar base64 no Firestore
+      const photoId = `${Date.now()}`;
+      const photoRef = ref(storage, `users/${currentUser.uid}/gallery/${photoId}.jpg`);
+      await uploadBytes(photoRef, compressed);
+      const downloadURL = await getDownloadURL(photoRef);
 
       await addDoc(collection(db, "user_photos"), {
         userId: currentUser.uid,
-        imageUrl: base64,
+        imageUrl: downloadURL,
         caption: newPhotoCaption.trim(),
         createdAt: serverTimestamp(),
         likes: [],

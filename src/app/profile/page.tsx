@@ -219,6 +219,11 @@ export default function ProfilePage() {
     const file = e.target.files?.[0];
     if (!file || !user) return;
 
+    if (file.size > 10 * 1024 * 1024) {
+      setImportStatus(t("perfil.photoLimitError") || "A foto selecionada excede o limite máximo de 10MB.");
+      return;
+    }
+
     setPhotoLoading(true);
     setImportStatus("");
 
