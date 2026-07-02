@@ -36,7 +36,9 @@ import {
   HelpCircle,
   Award,
   ArrowRight,
-  Heart
+  Heart,
+  Menu,
+  X
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import LanguageSelector from "@/components/ui/LanguageSelector";
@@ -53,6 +55,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Form profile states
   const [displayName, setDisplayName] = useState("");
@@ -616,7 +619,7 @@ export default function ProfilePage() {
           </span>
         </div>
 
-        <div className="flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-6">
           <Link href="/dashboard" className="text-xs font-bold uppercase tracking-[0.15em] text-quartz-500 hover:text-quartz-600 transition-colors">
             {t("nav.calendario") || "Calendário"}
           </Link>
@@ -632,7 +635,59 @@ export default function ProfilePage() {
             <span className="hidden md:inline">{t("perfil.logout") || "Sair"}</span>
           </button>
         </div>
+
+        {/* Hamburger Button for mobile */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="flex md:hidden p-2 text-spa-dark focus:outline-none cursor-pointer"
+          aria-label="Toggle Menu"
+        >
+          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </header>
+
+      {/* Mobile Drawer Overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-ivory bg-grain flex flex-col justify-between p-6 animate-in fade-in slide-in-from-right duration-300 md:hidden">
+          <div className="space-y-8">
+            <div className="flex justify-between items-center pb-6 border-b border-sand-100">
+              <div className="flex items-center gap-3">
+                <span className="font-serif text-2xl font-light tracking-[0.1em] text-spa-dark">nefertiti</span>
+                <span className="text-[10px] text-spa-light uppercase font-semibold tracking-[0.2em] border-l border-sand-200 pl-3">
+                  Santuário
+                </span>
+              </div>
+              <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-spa-dark">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <nav className="flex flex-col gap-6 text-sm font-semibold uppercase tracking-[0.2em] text-spa-light">
+              <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} className="hover:text-quartz-500 py-2">
+                {t("nav.calendario") || "Calendário"}
+              </Link>
+              <Link href="/social" onClick={() => setMobileMenuOpen(false)} className="hover:text-quartz-500 py-2">
+                {t("nav.social") || "Social"}
+              </Link>
+            </nav>
+          </div>
+          <div className="flex flex-col gap-4 border-t border-sand-100 pt-6">
+            <div className="flex justify-between items-center">
+              <span className="text-xs uppercase font-bold tracking-wider text-spa-light">Idioma</span>
+              <LanguageSelector />
+            </div>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleLogout();
+              }}
+              className="w-full mt-4 flex items-center justify-center gap-2 py-3 bg-quartz-50 hover:bg-quartz-100/50 border border-quartz-200 text-quartz-600 rounded-full text-xs font-bold uppercase tracking-[0.15em] transition-all cursor-pointer"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>{t("perfil.logout") || "Sair"}</span>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Main Panel grid */}
       <main className="max-w-6xl mx-auto px-6 mt-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">

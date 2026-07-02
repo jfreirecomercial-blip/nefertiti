@@ -350,7 +350,7 @@ export default function RegisterProfessionalPage() {
           <ArrowLeft className="w-4 h-4" />
           <span className="text-xs font-bold uppercase tracking-[0.15em]">Voltar ao Painel</span>
         </Link>
-        <span className="font-serif text-xl font-light tracking-[0.1em] text-spa-dark">Santuário Profissional</span>
+        <span className="font-serif text-xl font-light tracking-[0.1em] text-spa-dark hidden sm:inline-block">Santuário Profissional</span>
         <LanguageSelector />
       </header>
 
@@ -375,10 +375,10 @@ export default function RegisterProfessionalPage() {
           </div>
 
           {/* Stepper Progress Bar */}
-          <div className="mb-10 flex items-center justify-between px-4 sm:px-10">
+          <div className="mb-10 flex items-center justify-between px-2 sm:px-10">
             {[1, 2, 3, 4].map((num) => (
               <div key={num} className="flex items-center flex-grow last:flex-grow-0">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-500 ${
+                <div className={`w-7 h-7 sm:w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-500 ${
                   step === num 
                     ? "bg-quartz-400 text-white shadow-md ring-4 ring-quartz-100" 
                     : step > num 
@@ -388,7 +388,7 @@ export default function RegisterProfessionalPage() {
                   {step > num ? <Check className="w-4 h-4" /> : num}
                 </div>
                 {num < 4 && (
-                  <div className={`h-[2px] flex-grow mx-2 transition-colors duration-500 ${
+                  <div className={`h-[2px] flex-grow mx-1 sm:mx-2 transition-colors duration-500 ${
                     step > num ? "bg-spa-dark" : "bg-sand-100"
                   }`} />
                 )}

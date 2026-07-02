@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import CardFase from "@/components/ui/CardFase";
-import { ArrowRight, Star, ShieldAlert, ChevronDown, HelpCircle } from "lucide-react";
+import { ArrowRight, Star, ShieldAlert, ChevronDown, HelpCircle, Menu, X } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import LanguageSelector from "@/components/ui/LanguageSelector";
 import Footer from "@/components/ui/Footer";
@@ -11,6 +11,7 @@ import Footer from "@/components/ui/Footer";
 export default function LandingPage() {
   const { t } = useLanguage();
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Carregar e analisar as perguntas do FAQ do arquivo de tradução ativo
   let faqQuestions = [];
@@ -80,7 +81,7 @@ export default function LandingPage() {
           </Link>
         </nav>
 
-        <div className="flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-6">
           {/* Seletor de Idiomas Boutique */}
           <LanguageSelector />
 
@@ -99,7 +100,67 @@ export default function LandingPage() {
             {t("nav.fazerParte")}
           </Link>
         </div>
+
+        {/* Hamburger Button for mobile */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="flex md:hidden p-2 text-spa-dark focus:outline-none cursor-pointer"
+          aria-label="Toggle Menu"
+        >
+          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </header>
+
+      {/* Mobile Drawer Overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-ivory bg-grain flex flex-col justify-between p-6 animate-in fade-in slide-in-from-right duration-300 md:hidden">
+          <div className="space-y-8">
+            <div className="flex justify-between items-center pb-6 border-b border-sand-100">
+              <Link href="/" className="flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+                <span className="font-serif text-2xl font-light tracking-[0.1em] text-spa-dark">nefertiti</span>
+              </Link>
+              <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-spa-dark">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <nav className="flex flex-col gap-6 text-sm font-semibold uppercase tracking-[0.2em] text-spa-light">
+              <Link href="#proposta" onClick={() => setMobileMenuOpen(false)} className="hover:text-spa-dark py-2">
+                {t("nav.proposta")}
+              </Link>
+              <Link href="#ritmo" onClick={() => setMobileMenuOpen(false)} className="hover:text-spa-dark py-2">
+                {t("nav.ritmo")}
+              </Link>
+              <Link href="#manifesto" onClick={() => setMobileMenuOpen(false)} className="hover:text-spa-dark py-2">
+                {t("nav.manifesto")}
+              </Link>
+            </nav>
+          </div>
+          <div className="flex flex-col gap-4 border-t border-sand-100 pt-6">
+            <div className="flex justify-between items-center">
+              <span className="text-xs uppercase font-bold tracking-wider text-spa-light">Idioma</span>
+              <LanguageSelector />
+            </div>
+            <div className="flex flex-col gap-3 mt-4">
+              <Link
+                id="btn-login-mobile"
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full text-center py-3 text-xs font-bold uppercase tracking-[0.15em] border border-sand-200 text-spa-dark rounded-full hover:bg-white transition-all"
+              >
+                {t("nav.entrar")}
+              </Link>
+              <Link
+                id="btn-signup-mobile"
+                href="/login?signup=true"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full text-center py-3.5 text-xs font-bold uppercase tracking-[0.25em] bg-spa-dark text-white rounded-full hover:bg-quartz-400 transition-all"
+              >
+                {t("nav.fazerParte")}
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="flex-grow">
@@ -116,7 +177,7 @@ export default function LandingPage() {
               </span>
             </div>
 
-            <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-extralight leading-[1.1] text-spa-dark mb-8">
+            <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-extralight leading-[1.1] text-spa-dark mb-8">
               {t("hero.title1")} <br />
               <span className="italic text-quartz-400 font-normal">{t("hero.title2")}</span>
               {t("hero.title3")}

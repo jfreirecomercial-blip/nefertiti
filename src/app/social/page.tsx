@@ -640,7 +640,7 @@ export default function SocialPage() {
            Tab Navigation
            ═══════════════════════════════════════ */}
         <div className="flex justify-center">
-          <div className="flex gap-1 bg-sand-50/80 p-1.5 rounded-full border border-sand-200/50 w-fit">
+          <div className="flex gap-0.5 sm:gap-1 bg-sand-50/80 p-1 rounded-full border border-sand-200/50 w-fit">
             {([
               { key: 'feed' as const, label: 'Círculo', icon: Heart },
               { key: 'communities' as const, label: 'Comunidades', icon: Compass },
@@ -649,7 +649,7 @@ export default function SocialPage() {
               <button
                 key={key}
                 onClick={() => setActiveTab(key)}
-                className={`flex items-center gap-1.5 rounded-full px-5 py-2.5 text-xs font-medium transition-all cursor-pointer ${
+                className={`flex items-center gap-1 sm:gap-1.5 rounded-full px-3 py-2 sm:px-5 sm:py-2.5 text-[11px] sm:text-xs font-medium transition-all cursor-pointer ${
                   activeTab === key
                     ? 'bg-white text-spa-dark shadow-sm font-bold'
                     : 'text-spa-medium hover:text-spa-dark'
@@ -787,7 +787,7 @@ export default function SocialPage() {
 
                 {/* Photo Previews */}
                 {photoPreviews.length > 0 && (
-                  <div className="grid grid-cols-5 gap-2 border-t border-sand-100/40 pt-4">
+                  <div className="grid grid-cols-5 gap-1 sm:gap-2 border-t border-sand-100/40 pt-4">
                     {photoPreviews.map((url, idx) => (
                       <div key={idx} className="relative aspect-square border border-sand-200 rounded-xl overflow-hidden group">
                         {/* eslint-disable-next-line @next/next/no-img-element */}

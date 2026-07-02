@@ -177,21 +177,21 @@ export default function DashboardPage() {
         <Link
           href={`/daily-tracker?date=${dateStr}`}
           key={`day-${day}`}
-          className={`p-3.5 rounded-2xl flex flex-col justify-between items-center min-h-[75px] transition-all duration-300 relative group cursor-pointer ${phaseInfo.color}`}
+          className={`p-1.5 sm:p-3 rounded-xl sm:rounded-2xl flex flex-col justify-between items-center min-h-[50px] sm:min-h-[70px] transition-all duration-300 relative group cursor-pointer ${phaseInfo.color}`}
         >
-          <span className="text-xs font-semibold">{day}</span>
+          <span className="text-[10px] sm:text-xs font-semibold">{day}</span>
           
           {/* Indicadores de Sintomas e Água logados */}
           {logExist && (
-            <div className="flex gap-1 mt-1.5">
+            <div className="flex gap-0.5 sm:gap-1 mt-1 sm:mt-1.5">
               {logExist.flow && logExist.flow !== "none" && (
-                <div className="w-1.5 h-1.5 rounded-full bg-quartz-500" title="Fluxo menstrual" />
+                <div className="w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-quartz-500" title="Fluxo menstrual" />
               )}
               {logExist.waterIntakeMl > 0 && (
-                <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" title="Água registada" />
+                <div className="w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-indigo-400" title="Água registada" />
               )}
               {logExist.symptoms && logExist.symptoms.length > 0 && (
-                <div className="w-1.5 h-1.5 rounded-full bg-sand-500" title="Sintomas" />
+                <div className="w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-sand-500" title="Sintomas" />
               )}
             </div>
           )}
@@ -273,18 +273,18 @@ export default function DashboardPage() {
             </div>
 
             {/* Dias da Semana */}
-            <div className="grid grid-cols-7 gap-2 text-center text-[10px] font-bold uppercase tracking-widest text-spa-light">
-              <div>Dom</div>
-              <div>Seg</div>
-              <div>Ter</div>
-              <div>Qua</div>
-              <div>Qui</div>
-              <div>Sex</div>
-              <div>Sáb</div>
+            <div className="grid grid-cols-7 gap-1 sm:gap-2 text-center text-[10px] font-bold uppercase tracking-widest text-spa-light">
+              <div><span className="hidden sm:inline">Dom</span><span className="inline sm:hidden">D</span></div>
+              <div><span className="hidden sm:inline">Seg</span><span className="inline sm:hidden">S</span></div>
+              <div><span className="hidden sm:inline">Ter</span><span className="inline sm:hidden">T</span></div>
+              <div><span className="hidden sm:inline">Qua</span><span className="inline sm:hidden">Q</span></div>
+              <div><span className="hidden sm:inline">Qui</span><span className="inline sm:hidden">Q</span></div>
+              <div><span className="hidden sm:inline">Sex</span><span className="inline sm:hidden">S</span></div>
+              <div><span className="hidden sm:inline">Sáb</span><span className="inline sm:hidden">S</span></div>
             </div>
 
             {/* Grelha de Dias */}
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-7 gap-1 sm:gap-2">
               {renderCalendar()}
             </div>
 

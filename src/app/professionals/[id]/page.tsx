@@ -245,7 +245,7 @@ export default function ProfessionalProfileDetailPage() {
           <ArrowLeft className="w-4 h-4" />
           <span className="text-xs font-bold uppercase tracking-[0.15em]">Voltar</span>
         </Link>
-        <span className="font-serif text-xl font-light tracking-[0.1em] text-spa-dark">Nefertiti Health</span>
+        <span className="font-serif text-xl font-light tracking-[0.1em] text-spa-dark hidden sm:inline-block">Nefertiti Health</span>
         <LanguageSelector />
       </header>
 
