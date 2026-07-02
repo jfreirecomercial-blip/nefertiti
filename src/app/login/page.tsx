@@ -83,14 +83,19 @@ function LoginForm() {
   };
 
   const handleGoogleSignIn = async () => {
-    setError("");
-    setSuccess(false);
-    setLoading(true);
+    const provider = new GoogleAuthProvider();
     try {
-      const provider = new GoogleAuthProvider();
+      // Chama o popup imediatamente antes das atualizações de estado do React
+      // Isso evita que navegadores (especialmente Safari/Mobile) bloqueiem o popup
       const result = await signInWithPopup(auth, provider);
+      
+      setLoading(true);
+      setError("");
+      setSuccess(false);
+
       await createInitialUserDoc(result.user, result.user.displayName || "");
       await syncUserRole(result.user);
+      
       setSuccessMsg(t("login.successLogin") || "Login realizado com sucesso! Redirecionando...");
       setSuccess(true);
       setTimeout(() => {
@@ -98,7 +103,10 @@ function LoginForm() {
       }, 1000);
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "Erro ao autenticar com o Google.");
+      // Evita mostrar erro se o usuário apenas fechou o popup
+      if (err.code !== "auth/popup-closed-by-user" && err.code !== "auth/cancelled-popup-request") {
+        setError(err.message || "Erro ao autenticar com o Google.");
+      }
     } finally {
       setLoading(false);
     }
