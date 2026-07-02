@@ -160,36 +160,34 @@ export default function ProfessionalProfileDetailPage() {
     setError("");
 
     try {
-      const reviewId = doc(collection(db, "reviews")).id;
-      const newReview = {
-        id: reviewId,
-        professionalId: id,
-        authorId: currentUser.uid,
-        authorName: currentUser.displayName || "Membro Nefertiti",
-        rating: Number(rating),
-        comment: comment.trim(),
-        createdAt: new Date().toISOString()
-      };
+      // Obter o Token JWT do Firebase Auth da usuária logada (SEC-05)
+      const token = await currentUser.getIdToken();
 
-      // 1. Salvar avaliação no Firestore
-      await setDoc(doc(db, "reviews", reviewId), newReview);
-
-      // 2. Recalcular a nota média e total da profissional localmente e atualizar no Firestore
-      const updatedReviews = [newReview, ...reviews];
-      const totalReviews = updatedReviews.length;
-      const averageRating = Number(
-        (updatedReviews.reduce((sum, rev) => sum + rev.rating, 0) / totalReviews).toFixed(1)
-      );
-
-      // Atualizar o Firestore
-      const profRef = doc(db, "professionals", id);
-      await updateDoc(profRef, {
-        averageRating,
-        totalReviews
+      const res = await fetch("/api/reviews", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          professionalId: id,
+          rating: Number(rating),
+          comment: comment.trim()
+        })
       });
 
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || "Falha na resposta do servidor.");
+      }
+
+      const resData = await res.json();
+      const newReview = resData.review;
+      const averageRating = resData.averageRating;
+      const totalReviews = resData.totalReviews;
+
       // Atualizar estado
-      setReviews(updatedReviews);
+      setReviews([newReview, ...reviews]);
       setProfessional((prev: any) => prev ? { ...prev, averageRating, totalReviews } : null);
       setUserAlreadyReviewed(true);
       setReviewSuccess(true);

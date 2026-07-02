@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     }
 
     // 2. Chamar a moderação por IA do Gemini
-    const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
     let moderationResult = { approved: true, reason: "", category: "none" };
 
     if (!apiKey || apiKey === "AIzaSyFakeKeyForBuildTimePrerendering") {
@@ -195,11 +195,18 @@ Retorne EXCLUSIVAMENTE um objeto JSON válido (sem marcações markdown de bloco
       }
     }
 
+    // Buscar informações reais da usuária no Firestore para evitar personificação (SEC-02)
+    const userRef = adminDb.collection("users").doc(userId);
+    const userDoc = await userRef.get();
+    const userData = userDoc.exists ? userDoc.data() : null;
+    const realDisplayName = userData?.displayName || "Membro Nefertiti";
+    const realPhotoURL = userData?.photoURL || null;
+
     // Gravar post no Firestore usando o Admin SDK
     const postData = {
       userId: userId,
-      userName: userName || "Membro Nefertiti",
-      userPhoto: userPhoto || null,
+      userName: realDisplayName,
+      userPhoto: realPhotoURL,
       content: content || "",
       photos: uploadedUrls,
       isPublic: true,

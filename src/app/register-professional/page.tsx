@@ -84,9 +84,22 @@ export default function RegisterProfessionalPage() {
         try {
           const docRef = doc(db, "professionals", user.uid);
           const snap = await getDoc(docRef);
+          const verificationDocRef = doc(db, "professional_verifications", user.uid);
+          const verificationSnap = await getDoc(verificationDocRef);
+          
+          let verificationsData: any = {};
+          if (verificationSnap.exists()) {
+            verificationsData = verificationSnap.data();
+          }
+
           if (snap.exists()) {
             const data = snap.data();
-            setExistingProfile(data);
+            const fullProfileData = {
+              ...data,
+              identityUrl: verificationsData.identityUrl || "",
+              certificateUrl: verificationsData.certificateUrl || "",
+            };
+            setExistingProfile(fullProfileData);
             // Preencher campos com dados salvos se estiver pendente/rejeitado para edição
             setDisplayName(data.displayName || user.displayName || "");
             setSpecialty(data.specialty || "ginecologista");
@@ -231,8 +244,6 @@ export default function RegisterProfessionalPage() {
         bio,
         priceRange: priceRange.trim() ? priceRange.trim() : null, // Opcional
         approvalStatus: "pending" as const, // Sempre resubmete para aprovação
-        identityUrl: finalIdentityUrl,
-        certificateUrl: finalCertificateUrl,
         averageRating: existingProfile?.averageRating || 0,
         totalReviews: existingProfile?.totalReviews || 0,
         createdAt: existingProfile?.createdAt || new Date().toISOString(),
@@ -240,6 +251,15 @@ export default function RegisterProfessionalPage() {
       };
 
       await setDoc(doc(db, "professionals", currentUser.uid), professionalData);
+
+      // 4a. Salvar documentos confidenciais na nova coleção segura professional_verifications (SEC-03)
+      const verificationData = {
+        uid: currentUser.uid,
+        identityUrl: finalIdentityUrl,
+        certificateUrl: finalCertificateUrl,
+        updatedAt: new Date().toISOString()
+      };
+      await setDoc(doc(db, "professional_verifications", currentUser.uid), verificationData);
       
       // Atualizar perfil da usuária geral para adicionar papel de profissional se pendente
       const userRef = doc(db, "users", currentUser.uid);

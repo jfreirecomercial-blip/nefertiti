@@ -36,7 +36,7 @@ export async function POST(request: Request) {
       ? image.split("base64,")[1]
       : image;
 
-    const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
 
     // Se não houver chave de API configurada, fornecer dados mockados realistas para fins de demonstração/teste local
     if (!apiKey || apiKey === "AIzaSyFakeKeyForBuildTimePrerendering") {

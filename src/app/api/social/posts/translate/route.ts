@@ -43,7 +43,18 @@ export async function POST(request: Request) {
       );
     }
 
-    // 3. Buscar post no Firestore
+    // 3. Buscar informações do usuário e do post no Firestore para validação de acesso (SEC-04)
+    const userRef = adminDb.collection("users").doc(decodedToken.uid);
+    const userDoc = await userRef.get();
+    const userData = userDoc.exists ? userDoc.data() : null;
+
+    if (userData?.role === "partner") {
+      return NextResponse.json(
+        { error: "Acesso negado. Parceiros não têm permissão para acessar dados do feed social." },
+        { status: 403 }
+      );
+    }
+
     const postRef = adminDb.collection("social_posts").doc(postId);
     const postDoc = await postRef.get();
 
@@ -55,6 +66,16 @@ export async function POST(request: Request) {
     }
 
     const postData = postDoc.data() || {};
+
+    // Se o post estiver suspenso, apenas o dono ou admins podem acessá-lo/traduzi-lo
+    const isOwner = postData.userId === decodedToken.uid;
+    const isAdmin = userData?.role === "admin";
+    if (postData.status === "suspended" && !isOwner && !isAdmin) {
+      return NextResponse.json(
+        { error: "Esta publicação foi suspensa por moderação e não está disponível." },
+        { status: 403 }
+      );
+    }
     const content = postData.content || "";
 
     if (!content.trim()) {

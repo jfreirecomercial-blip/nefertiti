@@ -608,10 +608,26 @@ export default function AdminPage() {
                       ? "border-quartz-300 bg-quartz-50/20" 
                       : "border-sand-200/80 bg-white hover:border-sand-300"
                   }`}
-                  onClick={() => {
+                  onClick={async () => {
                     setSelectedProfessional(prof);
                     setShowRejectForm(false);
                     setRejectionReason("");
+                    
+                    // Carregar documentos confidenciais de professional_verifications (SEC-03)
+                    try {
+                      const verificationDocRef = doc(db, "professional_verifications", prof.uid);
+                      const verificationSnap = await getDoc(verificationDocRef);
+                      if (verificationSnap.exists()) {
+                        const verifData = verificationSnap.data();
+                        setSelectedProfessional((prev: any) => prev && prev.uid === prof.uid ? {
+                          ...prev,
+                          identityUrl: verifData.identityUrl,
+                          certificateUrl: verifData.certificateUrl
+                        } : prev);
+                      }
+                    } catch (err) {
+                      console.error("Erro ao carregar documentos confidenciais:", err);
+                    }
                   }}
                 >
                   <div className="flex items-center gap-3">
