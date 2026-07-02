@@ -66,7 +66,7 @@ export async function POST(request: Request) {
       // Se houver fotos e o texto tiver menção a imagens sexuais, ou o nome das fotos simular nudez
       if (photos && photos.length > 0) {
         for (const photo of photos) {
-          if (photo.includes("nude") || photo.includes("sex") || photo.includes("improprio") || photo.includes("impróprio")) {
+          if (!photo.startsWith("data:") && (photo.includes("nude") || photo.includes("sex") || photo.includes("improprio") || photo.includes("impróprio"))) {
             moderationResult = {
               approved: false,
               reason: "Nudez ou conteúdo sexualmente explícito detectado na imagem.",

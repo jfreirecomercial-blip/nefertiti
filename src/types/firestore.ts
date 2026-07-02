@@ -87,3 +87,128 @@ export interface ProfessionalReview {
   comment: string;
   createdAt: string;
 }
+
+// ---------------------------------------------------------------------------
+// Social Module Types
+// ---------------------------------------------------------------------------
+
+// Social Profile settings
+export interface SocialProfile {
+  userId: string;
+  bio: string;
+  whatsappNumber: string;    // Optional, e.g. "5511999999999"
+  allowScraps: boolean;      // Allow public wall messages
+  allowDirectChat: boolean;  // Allow direct chat initiation
+  interests: string[];       // Interest tags
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Friendship
+export interface Friendship {
+  id: string;
+  users: string[];           // [userIdA, userIdB]
+  status: "pending" | "accepted" | "declined";
+  senderId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Scrap (wall message)
+export interface Scrap {
+  id: string;
+  recipientId: string;
+  authorId: string;
+  authorName: string;
+  authorPhoto?: string;
+  content: string;
+  createdAt: string;
+}
+
+// Community
+export interface Community {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  creatorId: string;
+  creatorName: string;
+  moderators: string[];
+  memberCount: number;
+  imageUrl?: string;
+  createdAt: string;
+}
+
+// Community Member (subcollection document)
+export interface CommunityMember {
+  userId: string;
+  userName: string;
+  userPhoto?: string;
+  joinedAt: string;
+  role: "member" | "moderator" | "owner";
+}
+
+// Community Topic (subcollection document)
+export interface CommunityTopic {
+  id: string;
+  title: string;
+  creatorId: string;
+  creatorName: string;
+  creatorPhoto?: string;
+  isAnonymous: boolean;
+  createdAt: string;
+  lastActiveAt: string;
+  postCount: number;
+}
+
+// Topic Post (subcollection document)
+export interface TopicPost {
+  id: string;
+  content: string;
+  authorId: string;
+  authorName: string;
+  authorPhoto?: string;
+  isAnonymous: boolean;
+  createdAt: string;
+  reactions: {
+    love: string[];
+    hug: string[];
+    sad: string[];
+    laugh: string[];
+  };
+}
+
+// User Photo
+export interface UserPhoto {
+  id: string;
+  userId: string;
+  imageUrl: string;
+  caption: string;
+  createdAt: string;
+  likes: string[];
+  reactions: {
+    love: number;
+    wow: number;
+    cool: number;
+  };
+}
+
+// Photo Comment (subcollection document)
+export interface PhotoComment {
+  id: string;
+  authorId: string;
+  authorName: string;
+  authorPhoto?: string;
+  content: string;
+  createdAt: string;
+}
+
+// Post Comment (subcollection document for social_posts)
+export interface PostComment {
+  id: string;
+  authorId: string;
+  authorName: string;
+  authorPhoto?: string;
+  content: string;
+  createdAt: string;
+}

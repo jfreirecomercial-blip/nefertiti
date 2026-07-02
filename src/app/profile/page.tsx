@@ -56,6 +56,10 @@ export default function ProfilePage() {
 
   // Form profile states
   const [displayName, setDisplayName] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("Brasil");
+  const [shareArrival, setShareArrival] = useState(true);
   const [cycleLength, setCycleLength] = useState(28);
   const [periodLength, setPeriodLength] = useState(5);
   const [lastPeriodDate, setLastPeriodDate] = useState("");
@@ -169,6 +173,10 @@ export default function ProfilePage() {
             setCycleLength(profileData.cycleLength || 28);
             setPeriodLength(profileData.periodLength || 5);
             setLastPeriodDate(profileData.lastPeriodDate || "");
+            setCity(profileData.city || "");
+            setState(profileData.state || "");
+            setCountry(profileData.country || "Brasil");
+            setShareArrival(profileData.shareArrival !== false);
             if (profileData.contraceptive) {
               setContraceptiveEnabled(profileData.contraceptive.enabled || false);
               setContraceptiveType(profileData.contraceptive.type || "none");
@@ -253,13 +261,36 @@ export default function ProfilePage() {
     setSaving(true);
     setSaveSuccess(false);
 
+    // Validação de Nome de Exibição
+    const trimmedName = displayName.trim();
+    if (trimmedName.length < 3) {
+      alert("O nome de exibição deve ter no mínimo 3 caracteres.");
+      setSaving(false);
+      return;
+    }
+    const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
+    if (!nameRegex.test(trimmedName)) {
+      alert("O nome de exibição deve conter apenas letras e espaços.");
+      setSaving(false);
+      return;
+    }
+    // Capitalizar primeira letra de cada palavra
+    const formattedName = trimmedName
+      .split(/\s+/)
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+
     try {
       const userRef = doc(db, "users", user.uid);
       const updatedData = {
-        displayName,
+        displayName: formattedName,
         cycleLength: Number(cycleLength),
         periodLength: Number(periodLength),
         lastPeriodDate,
+        city,
+        state,
+        country,
+        shareArrival,
         contraceptive: {
           enabled: contraceptiveEnabled,
           type: contraceptiveType,
@@ -271,8 +302,24 @@ export default function ProfilePage() {
       };
 
       await updateDoc(userRef, updatedData);
-      await updateProfile(user, { displayName });
+      await updateProfile(user, { displayName: formattedName });
+
+      // Atualizar / Criar na coleção social_profiles
+      const socialRef = doc(db, "social_profiles", user.uid);
+      await setDoc(socialRef, {
+        userId: user.uid,
+        displayName: formattedName,
+        displayNameLowercase: formattedName.toLowerCase(),
+        displayNameWords: formattedName.toLowerCase().split(/\s+/).filter(Boolean),
+        photoURL: photoURL || null,
+        city,
+        state,
+        country,
+        shareArrival,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
       
+      setDisplayName(formattedName);
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
     } catch (err: any) {
@@ -792,6 +839,64 @@ export default function ProfilePage() {
                     className="w-full px-4.5 py-3 bg-ivory/50 border border-sand-200 hover:border-sand-300 focus:border-quartz-300 focus:bg-white rounded-xl text-xs text-spa-dark font-medium transition-all outline-none"
                   />
                 </div>
+              </div>
+
+              {/* Localização e Privacidade de Chegada */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-sand-100/60 pt-6">
+                <div>
+                  <label className="block text-[10px] uppercase font-bold tracking-widest text-spa-light mb-1.5">
+                    Cidade
+                  </label>
+                  <input
+                    type="text"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    placeholder="Ex: São Paulo"
+                    className="w-full px-4.5 py-3 bg-ivory/50 border border-sand-200 hover:border-sand-300 focus:border-quartz-300 focus:bg-white rounded-xl text-xs text-spa-dark font-medium transition-all outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] uppercase font-bold tracking-widest text-spa-light mb-1.5">
+                    Estado (Sigla)
+                  </label>
+                  <input
+                    type="text"
+                    maxLength={2}
+                    value={state}
+                    onChange={(e) => setState(e.target.value.toUpperCase())}
+                    placeholder="Ex: SP"
+                    className="w-full px-4.5 py-3 bg-ivory/50 border border-sand-200 hover:border-sand-300 focus:border-quartz-300 focus:bg-white rounded-xl text-xs text-spa-dark font-medium transition-all outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] uppercase font-bold tracking-widest text-spa-light mb-1.5">
+                    País
+                  </label>
+                  <input
+                    type="text"
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                    placeholder="Ex: Brasil"
+                    className="w-full px-4.5 py-3 bg-ivory/50 border border-sand-200 hover:border-sand-300 focus:border-quartz-300 focus:bg-white rounded-xl text-xs text-spa-dark font-medium transition-all outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="border-t border-sand-100/60 pt-4">
+                <label className="flex items-center gap-2 text-xs text-spa-medium cursor-pointer select-none">
+                  <input 
+                    type="checkbox"
+                    checked={shareArrival}
+                    onChange={(e) => setShareArrival(e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-4 h-4 rounded border border-sand-300 bg-white flex items-center justify-center peer-checked:bg-quartz-400 peer-checked:border-quartz-400 transition-all">
+                    <Check className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" />
+                  </div>
+                  <span>Divulgar minha chegada no Círculo (Painel de Boas-vindas)</span>
+                </label>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

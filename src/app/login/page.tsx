@@ -30,6 +30,7 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
+  const [shareArrival, setShareArrival] = useState(true);
   
   // States
   const [error, setError] = useState("");
@@ -37,7 +38,7 @@ function LoginForm() {
   const [success, setSuccess] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
 
-  const createInitialUserDoc = async (user: any, displayName: string) => {
+  const createInitialUserDoc = async (user: any, displayName: string, shareArrivalOpt = true) => {
     const userRef = doc(db, "users", user.uid);
     const snap = await getDoc(userRef);
 
@@ -61,6 +62,31 @@ function LoginForm() {
           marketingConsent: true,
           timestamp: new Date().toISOString()
         },
+        shareArrival: shareArrivalOpt,
+        city: "",
+        state: "",
+        country: "Brasil",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+
+      // Inicializar o perfil social correspondente para buscas e interações sociais seguras
+      const socialRef = doc(db, "social_profiles", user.uid);
+      const nameVal = displayName || "Membro Nefertiti";
+      await setDoc(socialRef, {
+        userId: user.uid,
+        displayName: nameVal,
+        displayNameLowercase: nameVal.toLowerCase(),
+        displayNameWords: nameVal.toLowerCase().split(/\s+/).filter(Boolean),
+        photoURL: user.photoURL || null,
+        bio: "",
+        city: "",
+        state: "",
+        country: "Brasil",
+        interests: [],
+        allowScraps: true,
+        allowDirectChat: true,
+        shareArrival: shareArrivalOpt,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       });
@@ -93,7 +119,7 @@ function LoginForm() {
       setError("");
       setSuccess(false);
 
-      await createInitialUserDoc(result.user, result.user.displayName || "");
+      await createInitialUserDoc(result.user, result.user.displayName || "", true);
       await syncUserRole(result.user);
       
       setSuccessMsg(t("login.successLogin") || "Login realizado com sucesso! Redirecionando...");
@@ -136,7 +162,7 @@ function LoginForm() {
         }
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(userCredential.user, { displayName: name });
-        await createInitialUserDoc(userCredential.user, name);
+        await createInitialUserDoc(userCredential.user, name, shareArrival);
         await syncUserRole(userCredential.user);
         setSuccessMsg(t("login.successSignup") || "Conta criada com sucesso! Redirecionando...");
         setSuccess(true);
@@ -289,6 +315,21 @@ function LoginForm() {
                   />
                 </div>
               </div>
+            )}
+
+            {mode === "signup" && (
+              <label className="flex items-center gap-2 text-xs text-spa-medium mt-3 cursor-pointer select-none">
+                <input 
+                  type="checkbox"
+                  checked={shareArrival}
+                  onChange={(e) => setShareArrival(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-4 h-4 rounded border border-sand-300 bg-white flex items-center justify-center peer-checked:bg-quartz-400 peer-checked:border-quartz-400 transition-all">
+                  <Check className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" />
+                </div>
+                <span className="text-[11px] font-medium text-spa-medium">Divulgar minha chegada no Círculo</span>
+              </label>
             )}
 
             {mode === "login" && (
