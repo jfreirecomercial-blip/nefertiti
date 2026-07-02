@@ -108,7 +108,8 @@ export default function ProfilePage() {
         }
       });
       if (!res.ok) {
-        throw new Error("Erro ao carregar recomendações");
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || "Erro ao carregar recomendações");
       }
       const data = await res.json();
       if (data.success) {

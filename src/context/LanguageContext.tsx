@@ -91,7 +91,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       }, translations["pt"]);
       
       if (fallbackValue === null || fallbackValue === undefined) {
-        return key; // Retorna a própria chave se não encontrar nada
+        return ""; // Retorna string vazia para permitir fallbacks com || ou ?? no componente
       }
       return typeof fallbackValue === "string" ? replaceVariables(fallbackValue, variables) : JSON.stringify(fallbackValue);
     }

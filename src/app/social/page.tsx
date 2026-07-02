@@ -42,6 +42,7 @@ import {
   Loader2,
   ExternalLink,
   Plus,
+  Globe,
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import LanguageSelector from "@/components/ui/LanguageSelector";
@@ -57,6 +58,8 @@ interface Post {
   likesCount: number;
   commentsCount: number;
   createdAt: Date;
+  translations?: Record<string, string>;
+  detectedLanguage?: string;
 }
 
 interface Comment {
@@ -183,6 +186,8 @@ export default function SocialPage() {
           likesCount: data.likesCount || 0,
           commentsCount: data.commentsCount || 0,
           createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : new Date(),
+          translations: data.translations || {},
+          detectedLanguage: data.detectedLanguage || "",
         });
       });
       
@@ -1142,6 +1147,66 @@ function PostCard({
   const [editContent, setEditContent] = useState(post.content);
   const [isSaving, setIsSaving] = useState(false);
 
+  // Translation states
+  const { language } = useLanguage();
+  const [isTranslated, setIsTranslated] = useState(false);
+  const [translatedText, setTranslatedText] = useState(post.translations?.[language] || "");
+  const [translating, setTranslating] = useState(false);
+  const [translationError, setTranslationError] = useState("");
+
+  // Sync translations when language changes
+  useEffect(() => {
+    setTranslatedText(post.translations?.[language] || "");
+    setIsTranslated(false);
+    setTranslationError("");
+  }, [language, post.translations]);
+
+  // Handle post translation request
+  const handleTranslate = async () => {
+    if (isTranslated) {
+      setIsTranslated(false);
+      return;
+    }
+
+    if (translatedText) {
+      setIsTranslated(true);
+      return;
+    }
+
+    if (!currentUser) return;
+    setTranslating(true);
+    setTranslationError("");
+
+    try {
+      const token = await currentUser.getIdToken();
+      const res = await fetch("/api/social/posts/translate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          postId: post.id,
+          targetLanguage: language
+        })
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || "Erro ao solicitar tradução.");
+      }
+
+      const data = await res.json();
+      setTranslatedText(data.translation);
+      setIsTranslated(true);
+    } catch (err: unknown) {
+      console.error("Erro na tradução do post:", err);
+      setTranslationError("Erro ao traduzir relato.");
+    } finally {
+      setTranslating(false);
+    }
+  };
+
   // Comment states
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -1391,9 +1456,37 @@ function PostCard({
         </div>
       ) : (
         post.content && (
-          <p className="text-xs sm:text-sm text-spa-medium font-light leading-relaxed whitespace-pre-wrap">
-            {post.content}
-          </p>
+          <div className="space-y-2">
+            <p className="text-xs sm:text-sm text-spa-medium font-light leading-relaxed whitespace-pre-wrap">
+              {isTranslated ? translatedText : post.content}
+            </p>
+            {currentUser && (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleTranslate}
+                  disabled={translating}
+                  className="flex items-center gap-1.5 text-[10px] text-olive-600 hover:text-olive-700 font-semibold cursor-pointer border-0 bg-transparent p-0 disabled:opacity-50 transition-all"
+                >
+                  {translating ? (
+                    <>
+                      <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                      <span>Traduzindo...</span>
+                    </>
+                  ) : isTranslated ? (
+                    <span>Ver original</span>
+                  ) : (
+                    <>
+                      <Globe className="w-2.5 h-2.5" />
+                      <span>Traduzir publicação</span>
+                    </>
+                  )}
+                </button>
+                {translationError && (
+                  <span className="text-[9px] text-red-500 font-light">{translationError}</span>
+                )}
+              </div>
+            )}
+          </div>
         )
       )}
 

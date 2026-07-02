@@ -112,7 +112,12 @@
     "errorPasswordsMismatch": "As senhas inseridas não coincidem.",
     "errorUserNotFound": "Nenhum usuário encontrado com este e-mail.",
     "errorWrongPassword": "A senha inserida está incorreta.",
-    "errorGeneric": "Ocorreu um erro. Tente novamente mais tarde."
+    "errorGeneric": "Ocorreu um erro. Tente novamente mais tarde.",
+    "backHome": "Voltar ao início",
+    "errorInvalidCredential": "E-mail ou senha inválidos. Verifique suas credenciais e tente novamente.",
+    "successLogin": "Login realizado com sucesso! Redirecionando...",
+    "successReset": "E-mail de recuperação enviado com sucesso!",
+    "successSignup": "Conta criada com sucesso! Redirecionando..."
   },
   "perfil": {
     "title": "Seu Santuário Pessoal",
@@ -138,7 +143,8 @@
     "deleting": "Excluindo todos os registros de saúde...",
     "deleteError": "Para excluir sua conta, você precisa ter feito login recentemente. Por favor, saia e entre novamente antes de tentar de novo.",
     "downloadData": "Baixar Meus Dados (JSON)",
-    "deleteAccount": "Excluir Minha Conta"
+    "deleteAccount": "Excluir Minha Conta",
+    "photoLimitError": "A imagem selecionada excede o limite máximo de 10MB."
   },
   "social": {
     "title": "Círculo de Cura",
@@ -152,7 +158,10 @@
     "circle1": "Círculo Lunar (Ciclos & Ritmos)",
     "circle2": "Alquimia na Cozinha (Nutrição)",
     "circle3": "Clínica Integrativa (Conselhos)",
-    "noPosts": "Nenhuma publicação no momento. Seja a primeira a acender a conversa!"
+    "noPosts": "Nenhuma publicação no momento. Seja a primeira a acender a conversa!",
+    "limitExceeded": "Limite máximo de 10 fotos atingido por relato.",
+    "photoSizeLimitError": "Uma ou mais fotos selecionadas excedem o limite máximo de 10MB.",
+    "postSuccess": "Relato publicado no santuário com sucesso!"
   },
   "faq": {
     "title": "Perguntas Frequentes",

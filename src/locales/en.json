@@ -112,7 +112,12 @@
     "errorPasswordsMismatch": "Entered passwords do not match.",
     "errorUserNotFound": "No user found with this email.",
     "errorWrongPassword": "The entered password is incorrect.",
-    "errorGeneric": "An error occurred. Please try again later."
+    "errorGeneric": "An error occurred. Please try again later.",
+    "backHome": "Back to Home",
+    "errorInvalidCredential": "Invalid email or password. Please check your credentials and try again.",
+    "successLogin": "Login successful! Redirecting...",
+    "successReset": "Recovery email sent successfully!",
+    "successSignup": "Account created successfully! Redirecting..."
   },
   "perfil": {
     "title": "Your Personal Sanctuary",
@@ -138,7 +143,8 @@
     "deleting": "Deleting all health records...",
     "deleteError": "To delete your account, you need to have signed in recently. Please log out and sign in again before retrying.",
     "downloadData": "Download My Data (JSON)",
-    "deleteAccount": "Delete My Account"
+    "deleteAccount": "Delete My Account",
+    "photoLimitError": "The selected image exceeds the maximum limit of 10MB."
   },
   "social": {
     "title": "Healing Circle",
@@ -152,7 +158,10 @@
     "circle1": "Lunar Circle (Cycles & Rhythms)",
     "circle2": "Kitchen Alchemy (Nutrition)",
     "circle3": "Integrative Clinic (Advice)",
-    "noPosts": "No posts at the moment. Be the first to light up the conversation!"
+    "noPosts": "No posts at the moment. Be the first to light up the conversation!",
+    "limitExceeded": "Maximum limit of 10 photos reached per post.",
+    "photoSizeLimitError": "One or more selected photos exceed the maximum limit of 10MB.",
+    "postSuccess": "Post published successfully in the sanctuary!"
   },
   "faq": {
     "title": "Frequently Asked Questions",

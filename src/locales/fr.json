@@ -112,7 +112,12 @@
     "errorPasswordsMismatch": "Les mots de passe saisis ne correspondent pas.",
     "errorUserNotFound": "Aucun utilisateur trouvé avec cet e-mail.",
     "errorWrongPassword": "Le mot de passe saisi est incorrect.",
-    "errorGeneric": "Une erreur est survenue. Veuillez réessayer plus tard."
+    "errorGeneric": "Une erreur est survenue. Veuillez réessayer plus tard.",
+    "backHome": "Retour à l'accueil",
+    "errorInvalidCredential": "E-mail ou mot de passe invalide. Veuillez vérifier vos identifiants et réessayer.",
+    "successLogin": "Connexion réussie ! Redirection...",
+    "successReset": "E-mail de récupération envoyé avec succès !",
+    "successSignup": "Compte créé avec succès ! Redirection..."
   },
   "perfil": {
     "title": "Votre Sanctuaire Personnel",
@@ -138,7 +143,8 @@
     "deleting": "Suppression de tous les dossiers de santé...",
     "deleteError": "Pour supprimer votre compte, vous devez vous être connecté récemment. Veuillez vous déconnecter et vous reconnecter avant de réessayer.",
     "downloadData": "Télécharger Mes Données (JSON)",
-    "deleteAccount": "Supprimer Mon Compte"
+    "deleteAccount": "Supprimer Mon Compte",
+    "photoLimitError": "L'image sélectionnée dépasse la limite maximale de 10 Mo."
   },
   "social": {
     "title": "Cercle de Guérison",
@@ -152,7 +158,10 @@
     "circle1": "Cercle Lunaire (Cycles & Rythmes)",
     "circle2": "Alchimie Culinaire (Nutrition)",
     "circle3": "Clinique Intégrative (Conseils)",
-    "noPosts": "Aucune publication pour le moment. Soyez la première à lancer la conversation !"
+    "noPosts": "Aucune publication pour le moment. Soyez la première à lancer la conversation !",
+    "limitExceeded": "Limite maximale de 10 photos atteinte par publication.",
+    "photoSizeLimitError": "Une ou plusieurs photos sélectionnées dépassent la limite maximale de 10 Mo.",
+    "postSuccess": "Publication publiée avec succès dans le sanctuaire !"
   },
   "faq": {
     "title": "Questions Fréquentes",
@@ -189,6 +198,29 @@
     "analyticsDesc": "Nous aident à comprendre comment la plateforme est utilisée de manière totalement anonyme.",
     "marketingTitle": "Marketing Intégratif",
     "marketingDesc": "Permettent de personnaliser les suggestions de bien-être et les offres selon vos intérêts."
+  },
+  "cumplices": {
+    "title": "Complices",
+    "subtitle": "Partagez votre cycle avec la personne qui marche à vos côtés pour bâtir empathie et complicité.",
+    "inviteBtn": "Connecter un Partenaire",
+    "revoking": "Annulation de la connexion...",
+    "revokeSuccess": "Connexion annulée avec succès.",
+    "codeValid": "Code de jumelage généré. Expire dans 24 heures :",
+    "partnerConnected": "Votre partenaire est connecté !",
+    "revokeBtn": "Déconnecter le Partenaire",
+    "explain": "En vous connectant, votre partenaire disposera d'un tableau de bord exclusif axé uniquement sur votre physiologie et les phases de votre cycle. Il n'aura aucun accès à votre espace social, publications, commentaires ou notes confidentielles.",
+    "partnerDashboard": "Tableau de Bord Complice",
+    "partnerHeader": "Connexion Complice",
+    "cyclePhase": "Phase Actuelle",
+    "daysToNext": "jours avant la prochaine phase",
+    "empathyTip": "Conseil de Bienveillance Complice",
+    "partnerWarning": "Accès Restreint : Vos autorisations sont limitées au suivi physiologique essentiel pour l'empathie du cycle.",
+    "enterCodeTitle": "Associer à une Partenaire",
+    "enterCodeDesc": "Saisissez le code à 6 chiffres généré dans son application pour synchroniser le calendrier du cycle.",
+    "codePlaceholder": "Code (ex: 123456)",
+    "btnSubmitCode": "Synchroniser les Cycles",
+    "invalidCode": "Code invalide ou expiré.",
+    "successLink": "Synchronisation réussie ! Redirection..."
   },
   "compliance": {
     "title": "Conformité et Règles par Pays",

@@ -56,4 +56,7 @@ env:
       - BUILD
       - RUNTIME
 
+  - variable: GEMINI_API_KEY
+    secret: gemini-api-key
+
 
